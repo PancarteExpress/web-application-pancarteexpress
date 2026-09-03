@@ -1,0 +1,86 @@
+{
+  "header": {
+    "becomeMember": "Devenir membre",
+    "myAccount": "Mon compte",
+    "fastService": "Service rapide 24h",
+    "givenService": "Service offert",
+    "schedule": "Du lundi au vendredi",
+    "location": "Dans la grande zone métropolitaine de Montréal",
+    "navbar": {
+      "home": "Accueil",
+      "residential": "Résidentiel",
+      "commercial": "Commercial",
+      "shop": "Boutique",
+      "contact": "Contact",
+      "cart": "Voir mon panier",
+      "onlineApplication": "Demande en ligne"
+    }
+  },
+  "home": {
+    "title_quote_1": "Installation de",
+    "title_quote_2": "Pancartes",
+    "title_quote_3": "Résidentielles et",
+    "title_quote_4": "Commerciales",
+    "onlineApplication": "Effectuez une demande en ligne",
+    "advantages": {
+      "title": "Profitez de nombreux avantages en devenant membre !",
+      "adv1": "Entreposage et entretien de votre affichage (pancartes, poteaux, ancrages, etc.)",
+      "adv2": "Rabais sur les installations résidentielles et commerciales",
+      "adv3": "Zone personnalisée avec tarifs préférentiels",
+      "adv4": "Installation d'urgence en moins de 24h",
+      "adv5": "Et bien plus encore !"
+    },
+    "becomeMember": "Devenez membre",
+    "aboutTitle": "vous offre un service complet d’installation de pancartes",
+    "aboutP1": "En effet, nous sommes spécialisés dans l'installation, l'entreposage et la gestion du matériel d'affichage des courtiers immobiliers depuis près de 15 ans. Nous offrons un service fiable et rapide dans la grande région métropolitaine de Montréal et ses alentours à des clients qui cherchent à optimiser leur temps et qui recherchent une prestation de qualité. Que vous soyez courtier immobilier, promoteur, organisateur d'événements ou autre professionnel, nous avons des solutions pour simplifier la gestion de votre affichage et vous permettre de vous concentrer sur ce qui compte vraiment : la gestion de vos projets.",
+    "aboutP2": "En ouvrant un compte chez Pancarte Express, vous aurez accès à tous nos services d'installation, de stockage et de gestion pour vos pancartes, panneaux, enseignes, boîtes à clé, drapeaux, poteaux, ancrages, grandes structures commerciales, affichages temporaires, installations au balcon et au mur, ainsi que bien d'autres solutions. Bénéficiez également d'offres personnalisées pour votre secteur et d'options d'installation flexibles adaptées à vos besoins. Nous sommes fiers d'avoir gagné la confiance de plus de 300 clients et nous nous engageons à maintenir cette relation grâce à notre professionnalisme et notre attachement à la qualité.",
+    "contactUs": "Contactez-nous pour en apprendre davantage !",
+    "serviceCard1": "Pancartes et enseignes illuminées",
+    "serviceCardSub1": "sur sol ou rampe",
+    "serviceCard2": "Pancarte sur structure",
+    "serviceCardSub2": "en bois ou aluminium",
+    "serviceCard3": "Pancarte",
+    "serviceCardSub3": "sur mur ou balcon",
+    "testimonialsTitle": "Témoignages de clients",
+    "testimonials": [
+      {
+        "name": "Chantal Provost, Proprio Direct",
+        "texte": "Super service, professionnel et rapide. J'apprécie énormément de déléguer cette tâche à des gens de confiance et professionnels. Merci de me faciliter ma vie professionnelle. Les délais sont respectés à chaque fois, ce qui est essentiel dans mon domaine d'activité. L'équipe est non seulement compétente, mais aussi très aimable et à l'écoute de mes besoins spécifiques. Je recommande vivement leurs services à tous ceux qui cherchent un partenaire de confiance pour la gestion de leurs pancartes, ce qui peut être très difficile dans la saison d'hiver. C'est rassurant de savoir que je peux compter sur un service aussi fiable et efficace même dans les conditions les plus exigeantes.`, name: 'Chantal Provost, Proprio Direct'},"
+      },
+      {
+        "name": "Stépahnie Gauthier, REMAX",
+        "texte": "Je tiens à remercier chaleureusement Pancarte Express pour leur excellent travail. Leur engagement envers la satisfaction du client est indéniable, et je recommande vivement leurs services d'installation à tout courtier immobilier cherchant une équipe fiable et compétente. Merci encore pour cette expérience positive !"
+      
+      },
+      {
+        "name": "Yzabel Brisson, REMAX",
+        "texte": "Pancarte express sans équivoque a changé ma vie!  L'été, l'hiver, rain or shine en un temps record...  Même juché dans une échelle ils donnent un service que j'estime incomparable et incontournable."
+      },
+      {
+        "name": "Marc-André Francoeur, REMAX",
+        "texte": "Simplement la référence ! Ils me permettent de toujours savoir que mes affiches sont installées rapidement et correctement sans avoir à me soucier de l'entreposage et de l'entretien de mes équipements. Bravo !!"
+      },
+      {
+        "name": "Jaclyn Rabin, Keller Williams Realty",
+        "texte": "En tant que courtier immobilier occupé, ce service est extrêmement utile!! Des tarifs justes et des délais rapides. Très fiable. Je le recommande vivement!"
+      },
+      {
+        "name": "James He, REMAX",
+        "texte": "Nous travaillons avec Pancarte Express depuis environ 3 ans et nous sommes très satisfaits de tous les services qu'ils nous offrent : installation professionnelle, temps de réponse rapide, gestion d'entreprise mature et expérimentée. Je le recommande à tous les courtiers!"
+      }
+    ]
+  },
+  "footer": {
+    "politics" : {
+      "quote1": "Votre service téléphonique est disponible en tout temps (boîte vocale). Pour les demandes en ligne, notre service est disponible 24h/24, 7 jours/7.",
+      "quote2": "Politique de confidentialité."
+    },
+    "contact" : {
+      "title": "Contactez-nous",
+      "service1": "Service client residentiel",
+      "service2": "Service client commercial",
+      "service3": "Service facturation et comptabilite"
+    },
+    "partners" : "Nos partenaires"
+  }
+}

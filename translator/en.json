@@ -1,0 +1,85 @@
+{
+  "header": {
+    "becomeMember": "Become a member",
+    "myAccount": "My account",
+    "fastService": "Fast service 24h",
+    "givenService": "Offered service",
+    "schedule": "From monday to friday",
+    "location": "In the greater Montréal metropolitan area",
+    "navbar": {
+      "home": "Home",
+      "residential": "Residential",
+      "commercial": "Commercial",
+      "shop": "Shop",
+      "contact": "Contact",
+      "cart": "My cart",
+      "onlineApplication": "Online Application"
+    }
+  },
+  "home": {
+    "title_quote_1": "Installation of",
+    "title_quote_2": "Frames,",
+    "title_quote_3": "Residential and",
+    "title_quote_4": "Commercial",
+    "onlineApplication": "Submit an online application",
+    "advantages": {
+      "title": "Take advantage of numerous benefits by becoming a member !",
+      "adv1": "Storage and maintenance of your signage (signs, posts, anchors, etc.)",
+      "adv2": "Discounts on residential and commercial installations",
+      "adv3": "Custom Areas with Special Rates",
+      "adv4": "Emergency Installation Within 24 Hours",
+      "adv5": "And much more !"
+    },
+    "becomeMember": "Become a member",
+    "aboutTitle": "provides comprehensive sign installation services",
+    "aboutP1": "Indeed, we specialize in the installation, storage, and management of signage materials for real estate brokers for nearly 15 years. We offer reliable and fast service throughout the Greater Montreal region and surrounding areas to clients who seek to optimize their time and who value quality service. Whether you are a real estate broker, developer, event organizer, or other professional, we have solutions to simplify your signage management and allow you to focus on what truly matters: managing your projects.",
+    "aboutP2": "By opening an account with Pancarte Express, you'll have access to all our installation, storage, and management services for your signs, panels, signage, mailboxes, flags, posts, anchors, large commercial structures, temporary displays, and balcony and wall installations, plus many other solutions. You'll also benefit from customized offers for your sector and flexible installation options tailored to your needs. We are proud to have earned the trust of over 300 clients and we are committed to maintaining this relationship through our professionalism and dedication to quality.",
+    "contactUs": "Contact Us to Learn More!",
+    "serviceCard1": "Illuminated signs and displays",
+    "serviceCardSub1": "on the ground or on a ramp",
+    "serviceCard2": "Structure-Mounted Sign",
+    "serviceCardSub2": "wood or aluminum",
+    "serviceCard3": "Frame",
+    "serviceCardSub3": "on wall or balcony",
+    "testimonialsTitle": "Customer Testimonials",
+    "testimonials": [
+        {
+        "texte": "Excellent service, professional and fast. I greatly appreciate being able to delegate this task to trustworthy and professional people. Thank you for making my professional life easier. Deadlines are met every time, which is essential in my line of business. The team is not only competent but also very friendly and attentive to my specific needs. I highly recommend their services to anyone looking for a trusted partner for managing their signage, which can be very challenging during the winter season. It's reassuring to know that I can rely on such reliable and efficient service even in the most demanding conditions.",
+        "name": "Chantal Provost, Proprio Direct"
+        },
+        {
+        "texte": "I would like to warmly thank Pancarte Express for their excellent work. Their commitment to customer satisfaction is undeniable, and I highly recommend their installation services to any real estate broker looking for a reliable and competent team. Thank you again for this positive experience!",
+        "name": "Stépahnie Gauthier, REMAX"
+        },
+        {
+        "texte": "Pancarte Express has undoubtedly changed my life! Summer, winter, rain or shine—in record time... Even perched on a ladder, they provide a service that I consider incomparable and essential.",
+        "name": "Yzabel Brisson, REMAX"
+        },
+        {
+        "texte": "Simply the best! They ensure my signs are always installed quickly and correctly without my having to worry about the storage and maintenance of my equipment. Bravo!!",
+        "name": "Marc-André Francoeur, REMAX"
+        },
+        {
+        "texte": "As a busy real estate broker, this service is most useful!! Fair prices, and quick turnaround. Very reliable. Highly recommend!",
+        "name": "Jaclyn Rabin, Keller Williams Realty"
+        },
+        {
+        "texte": "We have worked with Pancarte Express for about 3 years, we are very satisfied with all service provide by them, professional installation, speedy fast responding time, matures and experienced business management. Recommended to all the brokers!",
+        "name": "James He, REMAX"
+        }
+    ]
+  },
+  "footer": {
+    "politics" : {
+      "quote1": "Your phone service is available at all times (voicemail). For online requests, our service is available 24/7.",
+      "quote2": "Privacy Policy."
+    },
+    "contact" : {
+      "title": "Contact us",
+      "service1": "Residential customer service",
+      "service2": "Commercial customer service",
+      "service3": "Billing and accounting service"
+    },
+    "partners" : "Our partners"
+  }
+}
