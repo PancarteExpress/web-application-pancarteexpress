@@ -3,7 +3,7 @@ import { verifyJWT } from '@/lib/auth/jwt';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { locale: string } }
+  { params: _params }: { params: Promise<{ locale: string }> }
 ) {
   try {
     const token = req.cookies.get('session')?.value;
