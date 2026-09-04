@@ -109,7 +109,7 @@ export default function Header() {
                         <Link href={`/${locale}/cart`} className={styles.navItem} style={{ color: isActive('/cart') ? '#0E4D98' : 'black' }}>
                             <IoCartOutline size={22} />
                         </Link>
-                        <Link href={`/${locale}/demande-service`} className={styles.navItem}><FaPaperPlane /> {t('navbar.onlineApplication')}</Link>        
+                        <Link href={`/${locale}/service-request`} className={styles.navItem}><FaPaperPlane /> {t('navbar.onlineApplication')}</Link>        
                     </div>
 
                     {/* Responsive Navigation Toggle - Appears on screens of width 1000px and smaller */}
