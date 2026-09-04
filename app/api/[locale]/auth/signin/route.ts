@@ -8,7 +8,7 @@ const tokens = new Tokens();
 
 export async function POST(
   req: NextRequest,
-  { params: params }: { params: { locale: string } }
+  { params }: { params: Promise<{ locale: string }> }
 ) {
   try {
     // 1. Vérifier CSRF token

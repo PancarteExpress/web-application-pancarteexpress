@@ -5,7 +5,7 @@ const tokens = new Tokens();
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { locale: string } }
+  { params }: { params: Promise<{ locale: string }> }
 ) {
   try {
     const secret = tokens.secretSync();
