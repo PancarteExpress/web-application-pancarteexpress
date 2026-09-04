@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SuperAdmin {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Group {
+  id        String   @id @default(cuid())
+  name      String
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  emailVerified      DateTime?
+  passwordHash       String
+  firstName          String
+  lastName           String
+  phone              String
+  companyName        String?
+  groupId            String
+  group              Group    @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  role               String   @default("user")
+  verificationCodes  VerificationCode[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([groupId])
+  @@index([email])
+}
+
+model VerificationCode {
+  id        String   @id @default(cuid())
+  code      String
+  email     String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([userId])
+  @@index([email])
+}
