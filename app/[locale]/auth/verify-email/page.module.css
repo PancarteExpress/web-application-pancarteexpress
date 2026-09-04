@@ -1,0 +1,391 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mainContainer .hero {
+    width: 100%;
+    height: 125px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainContainer .hero label {
+    font-family: 'Montserrat', sans-serif;;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.mainContainer .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 80%;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 1000px)  { .mainContainer .container { grid-template-columns: 1fr; } }
+
+
+
+
+
+
+
+
+
+
+.formBody {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.formBody h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #092E5B;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.formBody .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.formBody .field label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #5F7FA8;
+    text-transform: capitalize;
+    letter-spacing: .05em;
+}
+
+.formBody .field input {
+    padding: 9px 12px;
+    border: 1px solid #C5D8EF;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #333333;
+    background: #F8FAFD;
+    outline: none;
+}
+
+.formBody .field input:focus {
+    border-color: #0E4D9A;
+    background: #FFFFFF;
+}
+
+.formBody .field input::placeholder {
+    color: #A8C4E8;
+}
+
+.formBody input[type="radio"] {
+    accent-color: #0E4D9A;
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.formBody input[type="radio"] + label {
+    font-family: 'Inter', sans-serif;
+    color: #333333;
+    cursor: pointer;
+}
+
+.req {
+    color: #C62828;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.mainContainer .container .about {
+    padding: 10px;
+    justify-content: center;
+}
+
+.mainContainer .container .about .aboutTitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #092E5B;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    line-height: 1.4;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #0E4D9A;
+}
+
+.ctaSolo, .ctaGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 10px;
+    
+}
+
+.ctaSolo {
+    background-color: #3279c5;
+    border: 2px solid #0E4D9A;
+}
+
+.ctaGroup {
+    background: lightgoldenrodyellow;
+    border: 2px solid gold;
+    color: black;
+}
+
+.ctaText {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+}
+
+.ctaPrice {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+}
+
+.mainContainer .container .about .aboutBlock {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    gap: 8px;
+}
+
+.blockText em {
+    color: #586679;
+    font-style: italic;
+    font-weight: 900;
+    font-size: var(--fs-sm);
+}
+
+.mainContainer .container .about .aboutBlock .blockLabel {
+    font-weight: 900;
+    color: #0E4D9A;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.mainContainer .container .about .aboutBlock .blockText {
+
+    color: #5F7FA8;
+    line-height: 1.7;
+}
+
+.mainContainer .container .about .aboutBlock .priceRows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.mainContainer .container .about .aboutBlock .priceRows .priceRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #D8E8F8;
+}
+
+.mainContainer .container .about .aboutBlock .priceRows .priceRow .priceLabel {
+    
+    color: #5F7FA8;
+}
+
+.mainContainer .container .about .aboutBlock .priceRows .priceRow .priceValue {
+    
+    font-weight: 900;
+    color: #0E4D9A;
+}
+
+.mainContainer .container .about .aboutBlock .priceRows .priceRow .priceHighlight {
+    font-size: 1.2rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.mainContainer .container .contactForm {
+    border-radius: 10px;
+    border: 1px solid #D8E8F8;
+    overflow: hidden;
+}
+
+.mainContainer .container .contactForm .formHead {
+    padding: 20px 24px;
+    border-bottom: 1px solid #EEF4FB;
+}
+
+.mainContainer .container .contactForm .formHead .formTitle {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    color: #092E5B;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.mainContainer .container .contactForm .formBody {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mainContainer .container .contactForm .formBody h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: #5F7FA8;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.mainContainer .container .contactForm .formBody .field {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.mainContainer .container .contactForm .formBody .field label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #5F7FA8;
+    text-transform: capitalize;
+    letter-spacing: .05em;
+}
+
+.mainContainer .container .contactForm .formBody .field .textarea {
+    padding: 9px 12px;
+    border: 1px solid #C5D8EF;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    background: #F8FAFD;
+    outline: none;
+    resize: vertical;
+}
+
+.mainContainer .container .contactForm .formBody .row .field .textarea:focus {
+    border-color: #0E4D9A;
+}
+
+.mainContainer .container .contactForm .formBody .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+@media (max-width: 1400px)  { .mainContainer .container .contactForm .formBody .row { grid-template-columns: 1fr; } }
+
+
+.mainContainer .container .contactForm .formBody .row .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.mainContainer .container .contactForm .formBody .row .field label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #5F7FA8;
+    text-transform: capitalize;
+    letter-spacing: .05em;
+}
+
+.mainContainer .container .contactForm .formBody .row .field input {
+    padding: 9px 12px;
+    border: 1px solid #C5D8EF;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    background: #F8FAFD;
+    outline: none;
+}
+
+.mainContainer .container .contactForm .formBody .row .field input:focus {
+    border-color: #0E4D9A;
+    background: white;
+}
+
+.mainContainer .container .contactForm .formBody .row .field input::placeholder {
+    color: #A8C4E8;
+}
+
+.mainContainer .container .contactForm .formBody .row .field .textarea::placeholder {
+    color: #A8C4E8;
+}
+
+.req {
+    color: #C62828;
+}
+
+.mainContainer .container .contactForm .formBody .error,
+.mainContainer .container .contactForm .formBody .success,
+.mainContainer .container .contactForm .formBody .loading {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.mainContainer .container .contactForm .formBody .error {
+    color: red;
+    border: 2px solid red;
+}
+
+.mainContainer .container .contactForm .formBody .success {
+    color: green;
+    border: 2px solid green;
+}
+
+.mainContainer .container .contactForm .formBody .loading {
+    color: orange;
+    border: 2px solid orange;
+}
+
+.mainContainer .container .contactForm .formBody .field button {
+    all: unset;
+    display: block;
+    width: 100%;
+    padding: 11px;
+    background: #0E4D9A;
+    color: white;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    letter-spacing: .03em;
+    transition: background .15s;
+    box-sizing: border-box;
+}

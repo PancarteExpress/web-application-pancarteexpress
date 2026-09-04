@@ -1,62 +1,79 @@
-import { auth } from '@/lib/auth/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyJWT } from '@/lib/auth/jwt';
 
-export default auth((req: NextRequest & { auth: any }) => {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const session = req.auth;
+  
+  // Extraire la locale du path
+  const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}(?:\/|$)/, '/');
+  const locale = pathname.split('/')[1];
 
-  // Routes publiques (accessible sans authentification)
+  // Routes publiques (accessible sans session)
   const publicRoutes = [
     '/auth/signin',
     '/auth/signup',
     '/auth/verify-email',
-    '/auth/forgot-password',
     '/',
+    '/service-request',
+    '/store',
   ];
 
-  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
+  const isPublicRoute = publicRoutes.some((route) =>
+    pathnameWithoutLocale.startsWith(route)
+  );
+
+  // Récupérer le JWT du cookie
+  const token = req.cookies.get('session')?.value;
+
+  // Vérifier la validité du JWT
+  let session = null;
+  if (token) {
+    session = await verifyJWT(token);
+    
+    // Si JWT invalide, supprimer le cookie
+    if (!session) {
+      const response = NextResponse.next();
+      response.cookies.delete('session');
+      return response;
+    }
+  }
 
   // Si pas de session et route privée → redirect signin
   if (!session && !isPublicRoute) {
-    return NextResponse.redirect(new URL('/auth/signin', req.url));
+    return NextResponse.redirect(new URL(`/${locale}/auth/signin`, req.url));
   }
 
   // Si session existe
   if (session) {
-    // SuperAdmin
-    if (session.user?.role === 'superAdmin') {
-      // Peut accéder /admin/* et /dashboard/*
-      if (pathname.startsWith('/auth')) {
-        return NextResponse.redirect(new URL('/admin/dashboard', req.url));
+    // SuperAdmin : peut aller /admin/* uniquement
+    if (session.role === 'superAdmin') {
+      if (!pathnameWithoutLocale.startsWith('/admin')) {
+        return NextResponse.redirect(new URL(`/${locale}/admin/dashboard`, req.url));
       }
     }
 
-    // User normal ou groupAdmin
-    if (session.user?.role === 'user' || session.user?.role === 'groupAdmin') {
-      // Peut accéder /dashboard/* mais pas /admin/*
-      if (pathname.startsWith('/admin')) {
-        return NextResponse.redirect(new URL('/dashboard', req.url));
-      }
-      if (pathname.startsWith('/auth')) {
-        return NextResponse.redirect(new URL('/dashboard', req.url));
+    // User normal ou groupAdmin : peuvent aller /dashboard/* mais pas /admin/*
+    if (session.role === 'user' || session.role === 'groupAdmin') {
+      if (pathnameWithoutLocale.startsWith('/admin')) {
+        return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
       }
     }
 
-    // Si sur signin/signup alors connecté → redirect dashboard
-    if (pathname.startsWith('/auth/signin') || pathname.startsWith('/auth/signup')) {
-      if (session.user?.role === 'superAdmin') {
-        return NextResponse.redirect(new URL('/admin/dashboard', req.url));
+    // Si déjà connecté et sur signin/signup → redirect dashboard
+    if (pathnameWithoutLocale.startsWith('/auth/signin') || 
+        pathnameWithoutLocale.startsWith('/auth/signup')) {
+      if (session.role === 'superAdmin') {
+        return NextResponse.redirect(new URL(`/${locale}/admin/dashboard`, req.url));
       }
-      return NextResponse.redirect(new URL('/dashboard', req.url));
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
     }
   }
 
   return NextResponse.next();
-});
+}
 
-// Matcher : quelles routes le middleware protège
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!api|_next|static|public).*)',
   ],
 };

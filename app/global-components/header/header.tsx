@@ -20,6 +20,7 @@ import { FaPaperPlane } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 //import { useAuth } from '@/app/context/AuthContext';
 import { getActivePath } from '@/app/utils/getActivePath';
+import { useSession } from '@/lib/auth/useSession';
 
 
 export default function Header() {
@@ -36,26 +37,31 @@ export default function Header() {
     const activePath = getActivePath(pathname);
     const isActive = (path: string) => activePath === path;
 
-    // Vérifier si connecté
-    //const { user, loading, refreshAuth } = useAuth();
+    const { session, loading } = useSession();
 
     // Fonction de déconnexion
-    const router = useRouter();
-    /*const handleLogout = async () => {
+    const handleLogout = async () => {
         try {
-            await fetch('/api/user/auth/logout', {
+            // 1. Récupérer le CSRF token
+            const csrfRes = await fetch(`/api/${locale}/auth/csrf`);
+            const csrfData = await csrfRes.json();
+            const csrfToken = csrfData.token;
+
+            // 2. Envoyer signout avec le token
+            await fetch(`/api/${locale}/auth/signout`, {
             method: 'POST',
-            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken,
+            },
             });
-            
-            // ← AJOUTE CETTE LIGNE
-            await refreshAuth();
-            
-            router.push(`/${locale}/myAccount`);
-        } catch (error) {
-            console.error('Erreur déconnexion:', error);
+
+            // 3. Redirect
+            window.location.href = `/${locale}`;
+        } catch (err) {
+            console.error('Erreur déconnexion:', err);
         }
-    };*/
+    };
 
     return (
         <header>
@@ -68,13 +74,13 @@ export default function Header() {
                     </div>
 
                     <div className={styles.account}>
-                        <Link href={`/${locale}/becomeMember`}>{t('becomeMember')}</Link>
-                        <Link href={`/${locale}/myAccount`}>{t('myAccount')}</Link>
-                        {/*user && 
+                        {!session.authenticated && <Link href={`/${locale}/auth/signup`}>{t('becomeMember')}</Link>}
+                        <Link href={`/${locale}/auth/signin`}>{t('myAccount')}</Link>
+                        {session.authenticated && 
                             <button onClick={handleLogout}>
-                                Déconnexion
+                            Déconnexion
                             </button>
-                        */}
+                        }
                     </div>
                 </div>
             </div>

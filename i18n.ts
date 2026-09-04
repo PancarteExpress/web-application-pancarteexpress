@@ -4,11 +4,11 @@ import enTranslator from '@/translator/en.json';
 
 export default getRequestConfig(({ locale }) => {
   const resolvedLocale = locale || 'fr';
-  const translator = locale === 'fr' ? frTranslator : enTranslator;
+  const messages = locale === 'fr' ? frTranslator : enTranslator;
 
   return {
     locale: resolvedLocale,
-    translator: translator,
+    messages: messages,
     timeZone: 'America/Toronto',
   };
 });

@@ -1,0 +1,139 @@
+.connectionForm {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 100px 20px;
+    min-height: 70vh;
+}
+
+.connectionForm .credentials {
+    width: 380px;
+    border: 1px solid #C5D8EF;
+    border-radius: 10px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    /* reset fieldset */
+    margin: 0;
+    legend { display: none; }
+}
+
+/* ─── Header ─── */
+
+.connectionForm .credentials .connectionHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #D8E8F8;
+}
+
+.connectionForm .credentials .connectionHeader label {
+    font-family: 'Inter', sans-serif;
+    color: #5F7FA8;
+}
+
+/* ─── Inputs ─── */
+
+.connectionForm .credentials .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.connectionForm .credentials .inputs label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: #5F7FA8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.connectionForm .credentials .inputs input {
+    padding: 10px 12px;
+    border: 1px solid #C5D8EF;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    background: #F8FAFD;
+    outline: none;
+}
+
+.connectionForm .credentials .inputs input:focus {
+    border-color: #0E4D9A;
+}
+
+/* ─── Lost password ─── */
+
+.connectionForm .credentials .lostPassword {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.connectionForm .credentials .lostPassword .newPassword {
+    all: unset;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    /*color: #0E4D9A;*/
+    cursor: pointer;
+}
+
+/* ─── Submit ─── */
+
+.connectionForm .credentials .submit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding-top: 4px;
+}
+
+.connectionForm .credentials .submit .feedback {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    text-align: center;
+    
+    width: 100%;
+}
+
+.connectionForm .credentials .submit .feedback .error {
+    color: red;
+    border: 2px solid red;
+    border-radius: 10px;
+}
+
+.connectionForm .credentials .submit .feedback .loading {
+    color: orange;
+    border: 2px solid orange;
+    border-radius: 10px;
+}
+
+.connectionForm .credentials .submit button {
+    all: unset;
+    display: block;
+    width: 100%;
+    padding: 11px;
+    background: #0E4D9A;
+    color: white;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    letter-spacing: .03em;
+    transition: background .15s;
+    box-sizing: border-box;
+}
+
+.connectionForm .credentials .submit label {
+    font-family: 'Inter', sans-serif;
+}
+
+.connectionForm .credentials .submit .becomeMember {
+    all: unset;
+    color: #0E4D9A;
+    font-weight: 600;
+    cursor: pointer;
+}
