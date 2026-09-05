@@ -3,10 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const tokens = new Tokens();
 
-export async function GET(
-  req: NextRequest,
-  { params: _params }: { params: Promise<{ locale: string }> }
-) {
+export async function GET(_req: NextRequest, { params: _params }: { params: Promise<{ locale: string }> } ) {
   try {
     const secret = tokens.secretSync();
     const token = tokens.create(secret);

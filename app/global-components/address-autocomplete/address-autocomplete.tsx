@@ -2,6 +2,12 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
+type GoogleAddressComponent = {
+  types: string[];
+  long_name: string;
+  short_name: string;
+};
+
 interface Props {
     value: string;
     onChange: (value: string) => void;
@@ -18,7 +24,7 @@ export default function AddressAutocomplete({ value, onChange, onCityChange, onP
     useEffect(() => {
         // Attendre que window.google soit disponible
         const checkGoogleLoaded = setInterval(() => {
-            // @ts-ignore
+            // @ts-expect-error
             if (window.google) {
                 clearInterval(checkGoogleLoaded);
                 initAutocomplete();
@@ -26,10 +32,10 @@ export default function AddressAutocomplete({ value, onChange, onCityChange, onP
         }, 100);
 
         function initAutocomplete() {
-            // @ts-ignore
+            // @ts-expect-error
             if (!inputRef.current || !window.google) return;
 
-            // @ts-ignore
+            // @ts-expect-error
             const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
                 types: ['address'],
                 componentRestrictions: { country: 'ca' },
@@ -42,19 +48,19 @@ export default function AddressAutocomplete({ value, onChange, onCityChange, onP
                     onChange(place.formatted_address);
                 }
 
-                const streetNumber = place.address_components?.find((c: any) => c.types.includes('street_number'))?.long_name ?? '';
-                const route = place.address_components?.find((c: any) => c.types.includes('route'))?.long_name ?? '';
+                const streetNumber = place.address_components?.find((c: GoogleAddressComponent) => c.types.includes('street_number'))?.long_name ?? '';
+                const route = place.address_components?.find((c: GoogleAddressComponent) => c.types.includes('route'))?.long_name ?? '';
                 const streetAddress = `${streetNumber} ${route}`.trim();
                 if (streetAddress) {
                     onStreetAddressChange?.(streetAddress);
                 }
 
-                const cityComponent = place.address_components?.find((c: any) => c.types.includes('locality'));
+                const cityComponent = place.address_components?.find((c: GoogleAddressComponent) => c.types.includes('locality'));
                 if (cityComponent) {
                     onCityChange?.(cityComponent.long_name);
                 }
 
-                const postalComponent = place.address_components?.find((c: any) => c.types.includes('postal_code'));
+                const postalComponent = place.address_components?.find((c: GoogleAddressComponent) => c.types.includes('postal_code'));
                 if (postalComponent) {
                     onPostalCodeChange?.(postalComponent.long_name);
                 }

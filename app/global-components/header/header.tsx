@@ -37,8 +37,9 @@ export default function Header() {
     const activePath = getActivePath(pathname);
     const isActive = (path: string) => activePath === path;
 
-    const { session, loading } = useSession();
-
+    const { session } = useSession();
+    const router = useRouter();
+    
     // Fonction de déconnexion
     const handleLogout = async () => {
         try {
@@ -57,7 +58,7 @@ export default function Header() {
             });
 
             // 3. Redirect
-            window.location.href = `/${locale}`;
+            router.push(`/${locale}`);
         } catch (err) {
             console.error('Erreur déconnexion:', err);
         }

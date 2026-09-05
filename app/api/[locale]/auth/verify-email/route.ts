@@ -5,14 +5,11 @@ import { isVerificationCodeExpired, isVerificationCodeBlocked } from '@/lib/auth
 
 const tokens = new Tokens();
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ locale: string }> }
-) {
+export async function POST(_req: NextRequest, { params: _params }: { params: Promise<{ locale: string }> }) {
   try {
     // 1. Vérifier CSRF token
-    const csrfToken = req.headers.get('X-CSRF-Token');
-    const csrfSecret = req.cookies.get('csrf-secret')?.value;
+    const csrfToken = _req.headers.get('X-CSRF-Token');
+    const csrfSecret = _req.cookies.get('csrf-secret')?.value;
 
     if (!csrfToken || !csrfSecret) {
       return NextResponse.json(
@@ -29,7 +26,7 @@ export async function POST(
     }
 
     // 2. Récupérer le body
-    const body = await req.json();
+    const body = await _req.json();
     const { email, code } = body;
 
     if (!email?.trim() || !code?.trim()) {
