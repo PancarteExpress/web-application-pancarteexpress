@@ -3,9 +3,6 @@
  * structure HTML + styles/polices globales + providers vraiment globaux
  */
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
 import type { Metadata } from 'next';
 import './globals.css';
 import { Inter, Poppins, Montserrat } from 'next/font/google';

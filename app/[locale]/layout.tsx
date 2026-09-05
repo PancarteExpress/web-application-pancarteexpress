@@ -5,7 +5,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
 import Header from '../global-components/header/header';
 import Footer from '../global-components/footer/footer';
 import frMessages from '@/translator/fr.json';
@@ -35,7 +34,6 @@ export default async function LocaleLayout({
 
   if (!locales.includes(locale)) notFound();
   
-  setRequestLocale(locale);
   const messages = locale === 'fr' ? frMessages : enMessages;
 
   return (
