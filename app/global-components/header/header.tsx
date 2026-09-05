@@ -63,11 +63,6 @@ export default function Header() {
         }
     };
 
-    // Ne pas afficher d'erreur si session n'est pas disponible
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
     return (
         <header>
             <div className={styles.topHeader}>
