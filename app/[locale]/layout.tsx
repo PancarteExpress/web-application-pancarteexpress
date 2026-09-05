@@ -6,18 +6,11 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
+import Header from '../global-components/header/header';
 import Footer from '../global-components/footer/footer';
 import frMessages from '@/translator/fr.json';
 import enMessages from '@/translator/en.json';
 import { Inter } from 'next/font/google'; 
-
-import dynamic from 'next/dynamic';
-
-//import Header from '../global-components/header/header';
-const Header = dynamic(() => import('../global-components/header/header'), {
-  ssr: false,
-  loading: () => <div style={{ height: '80px' }} />, // Placeholder durant le load
-});
 
 const inter = Inter({ subsets: ['latin'] });
 
