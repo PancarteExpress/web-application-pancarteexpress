@@ -6,8 +6,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
-//import Header from '../global-components/header/header';
-//import Footer from '../global-components/footer/footer';
+import Header from '../global-components/header/header';
+import Footer from '../global-components/footer/footer';
 import frMessages from '@/translator/fr.json';
 import enMessages from '@/translator/en.json';
 import { Inter } from 'next/font/google'; 
@@ -40,11 +40,11 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      {/*<Header />*/}
+      <Header />
       <main className="flex-grow">
         {children}
       </main>
-      {/*<Footer />*/}
+      <Footer />
     </NextIntlClientProvider>
   );
 }
