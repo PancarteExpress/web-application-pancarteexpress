@@ -43,22 +43,20 @@ export default function Header() {
     // Fonction de déconnexion
     const handleLogout = async () => {
         try {
-            // 1. Récupérer le CSRF token
             const csrfRes = await fetch(`/api/${locale}/auth/csrf`);
             const csrfData = await csrfRes.json();
             const csrfToken = csrfData.token;
 
-            // 2. Envoyer signout avec le token
             await fetch(`/api/${locale}/auth/signout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken,
-            },
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
             });
 
-            // 3. Redirect
-            router.push(`/${locale}`);
+            // Recharge la page complètement
+            window.location.href = `/${locale}`;
         } catch (err) {
             console.error('Erreur déconnexion:', err);
         }
