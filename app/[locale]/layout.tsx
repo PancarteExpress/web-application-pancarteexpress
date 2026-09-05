@@ -1,8 +1,6 @@
 /**
  * toute la logique métier (intl, auth, routes, etc.)
  */
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -21,9 +19,9 @@ export const metadata: Metadata = {
   title: 'MyApp',
 };
 
-/*export function generateStaticParams() {
+export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
-}*/
+}
 
 export default async function LocaleLayout({
   children,
