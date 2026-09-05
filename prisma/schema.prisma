@@ -57,3 +57,16 @@ model VerificationCode {
   @@unique([userId])
   @@index([email])
 }
+
+model ForgotPasswordCode {
+  id            String   @id @default(cuid())
+  code          String
+  email         String
+  expiresAt     DateTime
+  attemptsCount Int      @default(0)
+  isBlocked     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@unique([email])
+  @@index([email])
+}

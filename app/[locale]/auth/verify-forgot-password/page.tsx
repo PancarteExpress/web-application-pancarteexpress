@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { FaHouseChimney } from 'react-icons/fa6';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function VerifyEmailClient() {
+function VerifyForgotPasswordClient() {
   const [code, setCode] = useState('');
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const [attemptsLeft, setAttemptsLeft] = useState(3);
@@ -61,7 +62,7 @@ export default function VerifyEmailClient() {
     try {
       setIsFetching(true);
 
-      const response = await fetch(`/api/${locale}/auth/verify-email`, {
+      const response = await fetch(`/api/${locale}/auth/verify-forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +86,7 @@ export default function VerifyEmailClient() {
       }
 
       setTimeout(() => {
-        router.push(`/${locale}/auth/signin`);
+        router.push(`/${locale}/auth/reset-password?email=${encodeURIComponent(email)}`);
       }, 1000);
     } catch (err) {
       setError('Erreur réseau');
@@ -94,8 +95,8 @@ export default function VerifyEmailClient() {
     }
   };
 
-  const handleBackToSignin = () => {
-    router.push(`/${locale}/auth/signin`);
+  const handleBackToForgotPassword = () => {
+    router.push(`/${locale}/auth/forgot-password`);
   };
 
   return (
@@ -103,7 +104,7 @@ export default function VerifyEmailClient() {
       <fieldset className={styles.credentials}>
         <div className={styles.connectionHeader}>
           <FaHouseChimney size={30} style={{ color: '#0E4D9A' }} />
-          <label>Vérifier votre email</label>
+          <label>Vérifier le code</label>
         </div>
 
         <p style={{ textAlign: 'center', color: '#5F7FA8', fontSize: '14px', marginBottom: '20px' }}>
@@ -142,7 +143,7 @@ export default function VerifyEmailClient() {
 
           <button
             type="button"
-            onClick={handleBackToSignin}
+            onClick={handleBackToForgotPassword}
             style={{
               all: 'unset',
               color: '#0E4D9A',
@@ -151,10 +152,18 @@ export default function VerifyEmailClient() {
               textDecoration: 'underline',
             }}
           >
-            Retour à la connexion
+            Retour
           </button>
         </div>
       </fieldset>
     </form>
+  );
+}
+
+export default function VerifyForgotPasswordPage() {
+  return (
+    <Suspense fallback={<div>Chargement...</div>}>
+      <VerifyForgotPasswordClient />
+    </Suspense>
   );
 }

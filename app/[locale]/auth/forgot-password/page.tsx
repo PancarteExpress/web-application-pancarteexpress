@@ -4,20 +4,17 @@ import styles from '../signin/page.module.css';
 import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { FaHouseChimney } from 'react-icons/fa6';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-export default function VerifyEmailClient() {
-  const [code, setCode] = useState('');
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  const [attemptsLeft, setAttemptsLeft] = useState(3);
 
   const t = useTranslations('connection');
   const locale = useLocale();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const email = searchParams.get('email');
 
   useEffect(() => {
     const fetchCsrfToken = async () => {
@@ -38,13 +35,8 @@ export default function VerifyEmailClient() {
 
     setError(null);
 
-    if (!code.trim()) {
-      setError('Code requis');
-      return;
-    }
-
-    if (code.trim().length !== 6) {
-      setError('Le code doit contenir 6 chiffres');
+    if (!email.trim()) {
+      setError('Email requis');
       return;
     }
 
@@ -53,40 +45,30 @@ export default function VerifyEmailClient() {
       return;
     }
 
-    if (!email) {
-      setError('Email manquant');
-      return;
-    }
-
     try {
       setIsFetching(true);
 
-      const response = await fetch(`/api/${locale}/auth/verify-email`, {
+      const response = await fetch(`/api/${locale}/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-Token': csrfToken,
         },
         body: JSON.stringify({
-          email: email.toLowerCase(),
-          code: code.trim(),
+          email: email.trim().toLowerCase(),
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || 'Erreur vérification');
-        
-        if (data.remainingAttempts !== undefined) {
-          setAttemptsLeft(data.remainingAttempts);
-        }
+        setError(data.error || 'Erreur envoi email');
         return;
       }
 
       setTimeout(() => {
-        router.push(`/${locale}/auth/signin`);
-      }, 1000);
+        router.push(`/${locale}/auth/verify-forgot-password?email=${encodeURIComponent(email.trim().toLowerCase())}`);
+      }, 1500);
     } catch (err) {
       setError('Erreur réseau');
     } finally {
@@ -103,41 +85,32 @@ export default function VerifyEmailClient() {
       <fieldset className={styles.credentials}>
         <div className={styles.connectionHeader}>
           <FaHouseChimney size={30} style={{ color: '#0E4D9A' }} />
-          <label>Vérifier votre email</label>
+          <label>Mot de passe oublié</label>
         </div>
 
         <p style={{ textAlign: 'center', color: '#5F7FA8', fontSize: '14px', marginBottom: '20px' }}>
-          Entrez le code 6 chiffres envoyé à :
-          <br />
-          <strong>{email}</strong>
+          Entrez votre email pour recevoir un code de réinitialisation.
         </p>
 
         <div className={styles.inputs}>
-          <label htmlFor="code">Code de vérification</label>
+          <label htmlFor="email">Email</label>
           <input
-            id="code"
-            type="text"
-            placeholder="123456"
-            value={code}
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            maxLength={6}
+            id="email"
+            type="email"
+            placeholder="votremail@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-
-        {attemptsLeft < 3 && (
-          <p style={{ color: '#FF6B6B', fontSize: '12px', textAlign: 'center', marginTop: '-10px' }}>
-            {attemptsLeft} tentative(s) restante(s)
-          </p>
-        )}
 
         <div className={styles.submit}>
           <div className={styles.feedback}>
             {error && <p className={styles.error}>{error}</p>}
-            {isFetching && <p className={styles.loading}>Vérification en cours...</p>}
+            {isFetching && <p className={styles.loading}>Envoi en cours...</p>}
           </div>
 
           <button type="submit" disabled={isFetching}>
-            Vérifier
+            Envoyer le code
           </button>
 
           <button
