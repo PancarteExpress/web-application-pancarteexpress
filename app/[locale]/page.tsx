@@ -105,7 +105,7 @@ export default function Home() {
       <div className={styles.aboutcontainer}>
         
         <div className={styles.about}>
-          <h1><span>Pancarte Expresstest</span> {t('aboutTitle')}</h1>
+          <h1><span>Pancarte Express</span> {t('aboutTitle')}</h1>
           <p>
             {t('aboutP1')}
             <br/>
