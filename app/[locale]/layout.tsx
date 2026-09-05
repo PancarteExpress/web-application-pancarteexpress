@@ -2,6 +2,8 @@
  * toute la logique métier (intl, auth, routes, etc.)
  */
 
+export const dynamic = 'force-dynamic';
+
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
