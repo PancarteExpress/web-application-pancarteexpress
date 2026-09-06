@@ -7,7 +7,8 @@ type CartItemWithProduct = {
   quantity: number;
   product: {
     price: number;
-    name: string;
+    name_fr: string;
+    name_en: string | null;
   };
 };
 
@@ -39,11 +40,11 @@ export async function GET(
       include: { product: true },
     });
 
-    const items = (cartItems as CartItemWithProduct[]).map((item) => ({
+    const items = cartItems.map((item) => ({
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
-      name: item.product.name,
+      name: item.product.name_fr, // ← Utilise name_fr
     }));
 
     return NextResponse.json({
