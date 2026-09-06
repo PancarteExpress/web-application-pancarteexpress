@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { verifyJWT } from '@/lib/auth/jwt';
 
 type CartItemWithProduct = {
-  productId: string;
+  productId: number;
   quantity: number;
   product: {
     price: number;
