@@ -41,7 +41,7 @@ export default function Shop() {
     });
 
     // Hook pour le panier
-    const { addToCart, isLoading } = useCart();
+    const { addToCart } = useCart();
 
     const filteredProducts = selected === 'all' ? products : products.filter(p => p.category_id === parseInt(selected));
     
@@ -57,10 +57,10 @@ export default function Shop() {
         'anchors': t('categories.anchors'),
         'keyboxes': t('categories.keyboxes'),
         'hardware': t('categories.hardware'),
-        'commercial': t('categories.commercial'),
+        'structureBigFormat': t('categories.structureBigFormat'),
     };
 
-    const categoryOrder = ['poles', 'anchors', 'keyboxes', 'hardware', 'purchase', 'commercial'];
+    const categoryOrder = ['poles', 'anchors', 'keyboxes', 'hardware', 'structureBigFormat'];
 
     const navOptions: NavOption[] = [
     { key: 'all', label: t('categories.all') },

@@ -39,7 +39,7 @@
 @media (max-width: 1500px) { .mainContainer .display { width: 90%; } }
 
 .mainContainer .display .navigation {
-    width: 180px;
+    width: 200px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -53,11 +53,9 @@
 .mainContainer .display .navigation .navItem button {
     all: unset;
     display: block;
-    width: 100%;
-    padding: 8px 12px;
+    padding: 8px;
     border-radius: 7px;
     font-family: 'Inter', sans-serif;
-    font-weight: 400;
     color: #5F7FA8;
     cursor: pointer;
     transition: background .15s, color .15s;
