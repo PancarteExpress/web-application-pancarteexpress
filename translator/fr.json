@@ -70,6 +70,287 @@
       }
     ]
   },
+  "residential": {
+    "title": "Services résidentiels",
+    "Paragraph1": "Pour un affichage rapide de votre annonce, utilisez notre service d'installation résidentiel.",
+    "Paragraph2": "Installation ou récupération de pancartes, d'ajouts, de boîtes à clé ou de tout autre accessoire.",
+    "Redirection1": "Acheter du matériel d'affichage résidentiel",
+    "Redirection2": "Effectuer une demande en ligne",
+    "cards": [
+      {
+        "title": "Installation au sol",
+        "description": "La pancarte est ancrée dans le sol par un ancrage en métal pour garantir sa solidité et sa durabilité."
+      },
+      {
+        "title": "Installation d'enseigne illuminée",
+        "description": "L'enseigne illuminée est ancrée dans le sol par un ancrage en métal pour garantir sa solidité et sa durabilité. Un câble d'alimentation est ensuite branché sur une prise électrique extérieure, permettant à l'enseigne de s'illuminer et d'être visible de jour comme de nuit."
+      },
+      {
+        "title": "Installation sur rampe",
+        "description": "La pancarte est fixée directement à la rampe au moyen du poteau et de colliers de serrage en métal pour garantir sa solidité."
+      },
+      {
+        "title": "Installation au balcon",
+        "description": "La pancarte est attachée directement à la balustrade, de face ou de profil (en V), à l'aide de colliers de serrage en plastique pour garantir à la fois la visibilité et la solidité. L'installation peut être effectuée à l'aide d'une échelle jusqu'à une hauteur maximale d'environ 20 pieds (2e étage environ) ou sur rendez-vous avec l'occupant."
+      },
+      {
+        "title": "Installation résidentielle au mur",
+        "description": "La pancarte est vissée dans le mur, ou dans le joint de brique selon l'état de ce dernier, pour garantir sa durabilité. L'installation peut être effectuée à l'aide d'une échelle jusqu'à une hauteur maximale d'environ 20 pieds (2e étage environ)."
+      },
+      {
+        "title": "Installation ou retrait de boîtes à clés (cadenas)",
+        "description": "Installation d'un cadenas à code avec compartiment de rangement pour clés, généralement fixé sur la porte avant ou selon vos directives."
+      },
+      {
+        "title": "Installation ou retrait d’ajout",
+        "description": "Installation d'un ajout de votre choix sur une pancarte pour ajouter de l'information (exemples : « vendu », « à louer », ajout personnalisé à votre image, etc.). Location d'ajout également disponible."
+      },
+      {
+        "title": "Installation de flèches de visite libre",
+        "description": "Installation de flèches de visite libre (jusqu'à 5) pointant vers la propriété en vedette, placées à des coins de rues passants ou à des emplacements précis définis par vos soins dans le formulaire, avec retrait automatique en début de semaine suivante."
+      },
+      {
+        "title": "Installation de drapeaux",
+        "description": "Installation de drapeaux devant la propriété pour annoncer une visite libre ou d’autres informations."
+      }      
+    ]
+  },
+  "commercial": {
+    "title": "Services commerciaux",
+    "Paragraph1": "Chez Pancarte Express, nous sommes experts dans l'installation d'affichages grand format. Qu'il s'agisse de panneaux, enseignes, bannières ou pancartes,",
+    "Paragraph2": "commercial ou résidentiel, nous vous offrons des solutions pour vous afficher avec la meilleure visibilité possible. Nous offrons même un tout nouveau",
+    "Paragraph3": "service de location de structures en aluminium, parfait pour de l'affichage temporaire. Contactez-nous pour plus d'informations.",
+    "Redirection1": "Acheter du matériel d'affichage commercial",
+    "Redirection2": "Effectuer une demande en ligne",
+    "cards": [
+      {
+        "title": "Structure MINI RIGIDE",
+        "description1": "Une structure rigide personnalisée selon les dimensions de votre affichage.",
+        "description2": "Parfait pour l'événementiel, les projets temporaires ou l'affichage permanent : Affiche publicitaire, Signalisation extérieure, Pancarte de courtier immobilier, Vente ou promotion, Affiches « Nous embauchons », Autres",
+        "sections": [
+          {
+            "title": "Affichage Rigide :", 
+            "content": "Pancarte coroplast, Panneau alupanel, Enseigne rigide."
+          },
+          {
+            "title": "Différentes configurations :", 
+            "content": "1 façade, 2 façades « recto-verso »"
+          },
+          {
+            "title": "Dimension suggéré :", 
+            "content": "3×5 | 4×4 | 4×6 | max 6×6 |"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure STANDARD RIGIDE ",
+        "description1": "Une structure rigide personnalisée selon les dimensions de votre affichage.",
+        "description2": "Parfait pour l'événementiel, les projets temporaires ou permanents : Affiche publicitaire, Affichage commanditaire, Pancarte de courtier immobilier, Vente saisonnière, Recherche de personnel, Autres",
+        "sections": [
+          {
+            "title": "Affichage Rigide :", 
+            "content": "Pancarte coroplast, Panneau alupanel, Enseigne rigide."
+          },
+          {
+            "title": "Différentes configurations :", 
+            "content": "1 façade, 2 façades « recto-verso »"
+          },
+          {
+            "title": "Dimension suggéré :", 
+            "content": "4×8 | 4×6 | 6×6 | max 8×8|"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure LARGE RIGIDE ",
+        "description1": "Une structure rigide personnalisée selon les dimensions de votre affichage.",
+        "description2": "Parfait pour événement grand format extérieur : Affiche publicitaire, Affichage pour festival, Affiche d'exposant, Vente ou promotion, Affiches « Nous embauchons », Affichage sur un toit, Autres",
+        "sections": [
+          {
+            "title": "Affichage Rigide :", 
+            "content": "Pancarte coroplast, Panneau alupanel, Sintra."
+          },
+          {
+            "title": "Différentes configurations :", 
+            "content": "1 façade, 2 façades « recto-verso »"
+          },
+          {
+            "title": "Dimension suggéré :", 
+            "content": "5X10 | max 8X10 |"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure MINI FLEXIBLE",
+        "description1": "Une structure flexible personnalisée selon les dimensions de votre affichage.",
+        "description2": "Parfait pour l'événementiel, les projets temporaires ou permanents : Affiche publicitaire, Signalisation extérieure, Pancarte de courtier immobilier, Vente ou promotion, Affiches « Nous embauchons », Autres",
+        "sections": [
+          {
+            "title": "Affichage Flexible :", 
+            "content": "Bannière opaque (vinylle), Bannière perforé (mesh)."
+          },
+          {
+            "title": "Différentes configurations :", 
+            "content": "1 façade, 2 façades « recto-verso »"
+          },
+          {
+            "title": "Dimension suggéré :", 
+            "content": "4×4 | 4×6 | max 6×6 |"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure STANDARD FLEXIBLE",
+        "description1": "Une structure personnalisée, de type flexible, selon les dimensions de votre affichage.",
+        "description2": "Parfait pour l'événementiel, les projets temporaires et permanents : Affiche publicitaire, Affichage commanditaire, Pancarte de courtier immobilier, Vente saisonnière, Recherche de personnel, Autres",
+        "sections": [
+          {
+            "title": "Affichage Flexible :", 
+            "content": "Banniere Opaque avec aération, Banniere perforée (mesh)."
+          },
+          {
+            "title": "Différentes configurations :", 
+            "content": "1 façade, 2 façades « recto-verso »"
+          },
+          {
+            "title": "Dimension suggéré :", 
+            "content": "4×6 | 6×6 | 4×8 | max 7×8 |"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure LARGE FLEX",
+        "description1": "Une structure flexible personnalisée selon les dimensions de votre affichage. Ancrée solidement dans le sol par des pieux en métal pour une solidité et une durabilité à toute épreuve. Résiste parfaitement aux intempéries.",
+        "description2": "Parfait pour événement grand format extérieur : Affiche publicitaire, Affichage pour festival, Affiche d'exposant, Vente ou promotion, Affiches « Nous embauchons », Affichage sur un toit, Autres",
+        "sections": [
+          {
+            "title": "Affichage Flexible :", 
+            "content": "Banniere Opaque avec aération, Banniere perforée (mesh)."
+          },
+          {
+            "title": "Différentes configurations :", 
+            "content": "1 façade"
+          },
+          {
+            "title": "Dimension suggéré :", 
+            "content": "5×10 pieds | À | max 7×12 pieds |"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure MINI EN V",
+        "description1": "Une structure personnalisée selon les dimensions de votre affichage, de type rigide uniquement.",
+        "description2": "Parfait pour l'événementiel, les projets temporaires et permanents : Affiche publicitaire, Affichage commanditaire, Pancarte de courtier immobilier, Vente saisonnière, Recherche de personnel, Autres",
+        "sections": [
+          {
+            "title": "Affichage Rigide :", 
+            "content": "Panneaux coroplast, Pancarte alupanel, Enseigne rigide."
+          },
+          {
+            "title": "Différentes configurations :", 
+            "content": "2 façades en V"
+          },
+          {
+            "title": "Dimension suggéré (HxL) :", 
+            "content": "3×5| 4×4 | 4×6 | max 6×6 |"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure EN BOIS",
+        "description1": "Construction d'une structure en bois renforcée et personnalisée selon les dimensions de votre panneau. Ancrée solidement dans le sol par des pieux en métal pour une solidité et une durabilité garanties.",
+        "description2": "Parfait pour de l'affichage commercial temporaire, qu'il s'agisse d'un terrain, d'un commerce ou d'un nouveau développement, etc.",
+        "sections": [
+          {
+            "title": "Matériau utilisé :", 
+            "content": "Bois de construction 4pc x 4pc."
+          },
+          {
+            "title": "Couleur disponible :", 
+            "content": "Peinte (couleur au choix) ou non-peinte"
+          },
+          {
+            "title": "Dimensions pancartes :", 
+            "content": "4pi x 4pi | 3pi x 5pi | 3pi x 6pi | 4pi x 8pi | 8pi x 8pi | 4pi x 16pi | 1 façade ou 2 façades en V"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure Standard en V",
+        "description1": "Une structure personnalisée selon les dimensions de votre affichage, ancrée solidement dans le sol par des pieux en métal. Offre une solidité et une durabilité à toute épreuve, résistant parfaitement aux intempéries.",
+        "description2": "Parfait pour événement grand format extérieur : Affiche publicitaire, Affichage pour festival, Affiche d'exposant, Vente ou promotion, Affiches « Nous embauchons », Affichage de courtiers immobiliers, Autres",
+        "sections": [
+          {
+            "title": "Affichage Rigide :", 
+            "content": "Pancartes coroplast | Panneaux alupanel | Enseigne rigide"
+          },
+          {
+            "title": "Différentes configurations :", 
+            "content": "2 façades en V"
+          },
+          {
+            "title": "Dimension suggéré :", 
+            "content": "4×8 pieds | À | max 8×8 pieds |"
+          }
+        ],
+        "infos": "Disponible à l’achat ou à la location. Se référer à la section boutique pour l’achat. La location inclut l’installation de la structure, le déplacement et la récupération."
+      },
+      {
+        "title": "Structure CHEVALET EN BOIS",
+        "description1": "Construction d’une structure en bois de style Chevalet, idéale pour de l’affichage recto-verso en bord de route.",
+        "description2": "",
+        "sections": [
+          {
+            "title": "Dimensions pancartes :", 
+            "content": "4pi x 4pi à 4pi x 8pi | 1 façade ou 2 façades recto verso"
+          }
+        ]
+      },
+      {
+        "title": "Service d'installation avec Nacelle",
+        "description1": "Installation en hauteur sur bâtiment extérieur. L'installation peut être effectuée à l'aide d'équipement professionnel jusqu'à une hauteur maximale d'environ 35 pieds (3e étage environ).",
+        "description2": "",
+        "sections": [
+          {
+            "title": "Type d’affichage :", 
+            "content": "Pancarte | Affiche | Panneau | Banniere | Vinylle | Autocollant vitrine | Autres"
+          }
+        ]
+      },
+      {
+        "title": "Installation commerciale au mur à l'échelle",
+        "description1": "La pancarte est vissée dans le mur, ou dans le joint de brique selon l'état de ce dernier, pour garantir sa durabilité. L'installation peut être effectuée à l'aide d'une échelle jusqu'à une hauteur maximale d'environ 20 pieds (2e étage environ).",
+        "description2": "",
+        "sections": [
+          {
+            "title": "Dimensions pancartes :", 
+            "content": "Jusqu’à 4pi x 8pi"
+          }
+        ]
+      }
+         
+    ]
+  },
+  "shop": {
+    "title" : "Boutique",
+    "categories" : {
+      "all" : "Tout",
+      "keyboxes" : "Boîte à clés",
+      "anchors" : "Ancrage",
+      "commercial" : "Commercial",
+      "hardware" : "Quincaillerie",
+      "poles" : "Poteaux"
+    },
+    "addToCart": "Ajouter au panier"
+  },
   "becomeMember": {
     "title": "Ouverture de compte",
     "subTitle": "Devenir membre chez PANCARTE EXPRESS c'est bénéficier de nombreux avantages",

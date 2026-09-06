@@ -1,0 +1,280 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ─── Hero ─── */
+
+.mainContainer .hero {
+    width: 100%;
+    height: 125px;
+    
+    /*background-image: url('/hero/hero.jpg');
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;*/
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainContainer .hero label {
+    
+    font-family: 'Montserrat', sans-serif;;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.mainContainer .display {
+    display: flex;
+    margin: 0 auto;
+    width: 60%;
+}
+
+@media (max-width: 1650px) { .mainContainer .display { width: 80%; } }
+@media (max-width: 1500px) { .mainContainer .display { width: 90%; } }
+
+.mainContainer .display .navigation {
+    width: 180px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 24px 16px;
+}
+
+@media (max-width: 1500px) { .mainContainer .display .navigation { display: none; } }
+
+
+.mainContainer .display .navigation .navItem button {
+    all: unset;
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    color: #5F7FA8;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+}
+
+.mainContainer .display .navigation .navItem button:hover {
+    background: #E8F1FB;
+    color: #0E4D9A;
+}
+
+.mainContainer .display .navigation .navItem button.active {
+    background: #0E4D9A;
+    color: white;
+    font-weight: 600;
+}
+
+.mainContainer .display .navigation .navItem .subMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 0 4px 16px;
+}
+
+.mainContainer .display .navigation .navItem .subMenu button {
+    width: fit-content;
+}
+
+/* ─── Grid container ─── */
+
+.mainContainer .gridContainer {
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 1500px) { .mainContainer .gridContainer { width: 100%; } }
+
+/* ─── Responsive nav (chips) ─── */
+.mainContainer .gridContainer .responsiveNav {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+}
+
+@media (max-width: 1500px) { 
+    .mainContainer .gridContainer .responsiveNav { display: flex; } }
+
+@media (max-width: 700px) {
+    .mainContainer .gridContainer .responsiveNav {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.mainContainer .gridContainer .responsiveNav .navItem {
+    display: flex;
+    align-items: center;
+}
+
+.mainContainer .gridContainer .responsiveNav .navItem button {
+    all: unset;
+    display: block;
+    width: 100%;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1.5px solid #5F7FA8;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: #5F7FA8;
+    cursor: pointer;
+    text-align: center;
+    transition: background .15s, color .15s, border-color .15s;
+}
+
+.mainContainer .gridContainer .responsiveNav .navItem button:hover {
+    background: #E8F1FB;
+    color: #0E4D9A;
+    border-color: #0E4D9A;
+}
+
+.mainContainer .gridContainer .responsiveNav .navItem button.active {
+    background: #0E4D9A;
+    color: white;
+    border-color: #0E4D9A;
+}
+
+/* ─── Grid ─── */
+.mainContainer .gridContainer .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 16px;
+}
+
+@media (max-width: 900px)  { .mainContainer .gridContainer .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 760px)  { .mainContainer .gridContainer .grid { grid-template-columns: 1fr; } }
+
+/* ─── Card ─── */
+
+.mainContainer .grid .card {
+    position: relative;
+    aspect-ratio: 0.63;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid #D8E8F8;
+    transition: box-shadow .2s, transform .2s;
+    background: white;
+}
+
+.mainContainer .grid .card:hover {
+    box-shadow: 0 6px 24px rgba(14, 77, 154, .15);
+    transform: translateY(-3px);
+}
+
+/* ─── Cart overlay ─── */
+
+.mainContainer .grid .card .goToCart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(9, 46, 91, 0.75);
+    cursor: pointer;
+}
+
+.mainContainer .grid .card:hover .goToCart,
+.mainContainer .grid .card .goToCart.added {
+    display: flex;
+}
+
+.mainContainer .grid .card .goToCart.added {
+    background-color: rgba(27, 94, 32, 0.85);
+}
+
+.mainContainer .grid .card .goToCart .logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: white;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    transition: background .15s, color .15s;
+}
+
+.mainContainer .grid .card .goToCart:not(.added):hover .logoContainer {
+    background: white;
+    color: #0E4D9A;
+}
+
+/* ─── Image ─── */
+
+.mainContainer .grid .card .imageContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* ─── Content ─── */
+
+.mainContainer .grid .card .content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    z-index: 1;
+    background-color: #F4F6F9;
+    border-top: 1px solid #D8E8F8;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: height .3s ease;
+}
+
+@media (min-width: 1000px) { .mainContainer .grid .card:hover .content { height: 36%; } }
+@media (max-width: 760px)  { .mainContainer .grid .card .content { height: 20%; } }
+
+.mainContainer .grid .card .content h3,
+.mainContainer .grid .card .content p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 10px;
+    margin: 0;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.mainContainer .grid .card .content h3 {
+    flex: 2;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: #1A1A2E;
+}
+
+.mainContainer .grid .card .content p {
+    flex: 1;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #0E4D9A;
+}

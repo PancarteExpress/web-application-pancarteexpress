@@ -69,6 +69,287 @@
         }
     ]
   },
+  "residential": {
+    "title": "Residential services",
+    "Paragraph1": "For quick display of your listing, use our residential installation service.",
+    "Paragraph2": "Installation or removal of signs, add-ons, key boxes, or any other accessories.",
+    "Redirection1": "Purchase residential signage materials",
+    "Redirection2": "Submit an online request",
+    "cards": [
+      {
+        "title": "Ground Installation",
+        "description": "The sign is anchored in the ground with a metal anchor to ensure its stability and durability."
+      },
+      {
+        "title": "Illuminated Sign Installation",
+        "description": "The illuminated sign is anchored in the ground with a metal anchor to ensure its stability and durability. A power cable is then connected to an outdoor electrical outlet, allowing the sign to illuminate and be visible day and night."
+      },
+      {
+        "title": "Ramp Installation",
+        "description": "The sign is mounted directly to the ramp using a post and metal fasteners to ensure its stability."
+      },
+      {
+        "title": "Balcony Installation",
+        "description": "The sign is attached directly to the balustrade, front-facing or angled (V-shaped), using plastic cable ties to ensure both visibility and stability. Installation can be performed using a ladder up to a maximum height of approximately 20 feet (second floor approximately) or by appointment with the occupant."
+      },
+      {
+        "title": "Residential Wall Installation",
+        "description": "The sign is screwed into the wall, or into the brick joint depending on the wall's condition, to ensure durability. Installation can be performed using a ladder up to a maximum height of approximately 20 feet (second floor approximately)."
+      },
+      {
+        "title": "Key Box Installation or Removal (Lock Box)",
+        "description": "Installation of a code lock with a key storage compartment, typically mounted on the front door or according to your specifications."
+      },
+      {
+        "title": "Add-on Installation or Removal",
+        "description": "Installation of add-ons of your choice on a sign to add information (examples: 'sold', 'for rent', custom add-ons with your branding, etc.). Add-on rental is also available."
+      },
+      {
+        "title": "Open House Arrow Installation",
+        "description": "Installation of open house arrows (up to 5) pointing to the featured property, placed at busy street corners or specific locations defined by you in the form, with automatic removal at the beginning of the following week."
+      },
+      {
+        "title": "Flag Installation",
+        "description": "Installation of flags in front of the property to announce an open house or other information."
+      }
+    ]
+  },
+  "commercial": {
+    "title": "Commercial services",
+    "Paragraph1": "At Pancarte Express, we are experts in large-format signage installation. Whether it's panels, signs, banners or displays,",
+    "Paragraph2": "commercial or residential, we offer you solutions to display your signage with the best possible visibility. We even offer a brand new",
+    "Paragraph3": "aluminum structure rental service, perfect for temporary displays. Contact us for more information.",
+    "Redirection1": "Purchase commercial signage materials",
+    "Redirection2": "Submit an online request",
+    "cards": [
+      {
+        "title": "MINI RIGID STRUCTURE",
+        "description1": "A rigid structure customized according to the dimensions of your signage.",
+        "description2": "Perfect for events, temporary or permanent displays: Advertising poster, Exterior signage, Real estate broker sign, Sales or promotion, 'We're Hiring' signs, Other",
+        "sections": [
+          {
+            "title": "Rigid Signage:", 
+            "content": "Coroplast sign, Alupanel panel, Rigid sign."
+          },
+          {
+            "title": "Different configurations:", 
+            "content": "1 side, 2 sides 'double-sided'"
+          },
+          {
+            "title": "Suggested dimension:", 
+            "content": "3×5 | 4×4 | 4×6 | max 6×6 |"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "STANDARD RIGID STRUCTURE",
+        "description1": "A rigid structure customized according to the dimensions of your signage.",
+        "description2": "Perfect for events, temporary or permanent projects: Advertising poster, Sponsor display, Real estate broker sign, Seasonal sale, Personnel search, Other",
+        "sections": [
+          {
+            "title": "Rigid Signage:", 
+            "content": "Coroplast sign, Alupanel panel, Rigid sign."
+          },
+          {
+            "title": "Different configurations:", 
+            "content": "1 side, 2 sides 'double-sided'"
+          },
+          {
+            "title": "Suggested dimension:", 
+            "content": "4×8 | 4×6 | 6×6 | max 8×8|"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "LARGE RIGID STRUCTURE",
+        "description1": "A rigid structure customized according to the dimensions of your signage.",
+        "description2": "Perfect for large-format outdoor event: Advertising poster, Festival display, Exhibitor sign, Sales or promotion, 'We're Hiring' signs, Roof display, Other",
+        "sections": [
+          {
+            "title": "Rigid Signage:", 
+            "content": "Coroplast sign, Alupanel panel, Sintra."
+          },
+          {
+            "title": "Different configurations:", 
+            "content": "1 side, 2 sides 'double-sided'"
+          },
+          {
+            "title": "Suggested dimension:", 
+            "content": "5×10 | max 8×10 |"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "MINI FLEXIBLE STRUCTURE",
+        "description1": "A flexible structure customized according to the dimensions of your signage.",
+        "description2": "Perfect for events, temporary or permanent projects: Advertising poster, Exterior signage, Real estate broker sign, Sales or promotion, 'We're Hiring' signs, Other",
+        "sections": [
+          {
+            "title": "Flexible Signage:", 
+            "content": "Opaque banner (vinyl), Perforated banner (mesh)."
+          },
+          {
+            "title": "Different configurations:", 
+            "content": "1 side, 2 sides 'double-sided'"
+          },
+          {
+            "title": "Suggested dimension:", 
+            "content": "4×4 | 4×6 | max 6×6 |"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "STANDARD FLEXIBLE STRUCTURE",
+        "description1": "A structure customized, flexible type, according to the dimensions of your signage.",
+        "description2": "Perfect for events, temporary and permanent projects: Advertising poster, Sponsor display, Real estate broker sign, Seasonal sale, Personnel search, Other",
+        "sections": [
+          {
+            "title": "Flexible Signage:", 
+            "content": "Opaque banner with ventilation, Perforated banner (mesh)."
+          },
+          {
+            "title": "Different configurations:", 
+            "content": "1 side, 2 sides 'double-sided'"
+          },
+          {
+            "title": "Suggested dimension:", 
+            "content": "4×6 | 6×6 | 4×8 | max 7×8 |"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "LARGE FLEX STRUCTURE",
+        "description1": "A flexible structure customized according to the dimensions of your signage. Firmly anchored in the ground by metal stakes for durability and strength that withstands all weather. Resists weather perfectly.",
+        "description2": "Perfect for large-format outdoor event: Advertising poster, Festival display, Exhibitor sign, Sales or promotion, 'We're Hiring' signs, Roof display, Other",
+        "sections": [
+          {
+            "title": "Flexible Signage:", 
+            "content": "Opaque banner with ventilation, Perforated banner (mesh)."
+          },
+          {
+            "title": "Different configurations:", 
+            "content": "1 side"
+          },
+          {
+            "title": "Suggested dimension:", 
+            "content": "5×10 feet | To | max 7×12 feet |"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "MINI V-STRUCTURE",
+        "description1": "A structure customized according to the dimensions of your signage, rigid type only.",
+        "description2": "Perfect for events, temporary and permanent projects: Advertising poster, Sponsor display, Real estate broker sign, Seasonal sale, Personnel search, Other",
+        "sections": [
+          {
+            "title": "Rigid Signage:", 
+            "content": "Coroplast panels, Alupanel sign, Rigid sign."
+          },
+          {
+            "title": "Different configurations:", 
+            "content": "2 V-shaped sides"
+          },
+          {
+            "title": "Suggested dimension (HxW):", 
+            "content": "3×5| 4×4 | 4×6 | max 6×6 |"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "WOODEN STRUCTURE",
+        "description1": "Construction of a reinforced wooden structure customized according to the dimensions of your panel. Firmly anchored in the ground by metal stakes for guaranteed strength and durability.",
+        "description2": "Perfect for temporary commercial displays, whether for a lot, a business or a new development, etc.",
+        "sections": [
+          {
+            "title": "Material used:", 
+            "content": "4pc x 4pc construction lumber."
+          },
+          {
+            "title": "Available colors:", 
+            "content": "Painted (color of your choice) or unpainted"
+          },
+          {
+            "title": "Sign dimensions:", 
+            "content": "4ft x 4ft | 3ft x 5ft | 3ft x 6ft | 4ft x 8ft | 8ft x 8ft | 4ft x 16ft | 1 side or 2 V-shaped sides"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "Standard V-Structure",
+        "description1": "A structure customized according to the dimensions of your signage, firmly anchored in the ground by metal stakes. Offers strength and durability that withstands all weather, resisting weather perfectly.",
+        "description2": "Perfect for large-format outdoor event: Advertising poster, Festival display, Exhibitor sign, Sales or promotion, 'We're Hiring' signs, Real estate broker display, Other",
+        "sections": [
+          {
+            "title": "Rigid Signage:", 
+            "content": "Coroplast signs | Alupanel panels | Rigid sign"
+          },
+          {
+            "title": "Different configurations:", 
+            "content": "2 V-shaped sides"
+          },
+          {
+            "title": "Suggested dimension:", 
+            "content": "4×8 feet | To | max 8×8 feet |"
+          }
+        ],
+        "infos": "Available for purchase or rental. Refer to the shop section for purchase. Rental includes structure installation, delivery and pickup."
+      },
+      {
+        "title": "WOODEN EASEL STRUCTURE",
+        "description1": "Construction of an easel-style wooden structure, ideal for double-sided roadside displays.",
+        "description2": "",
+        "sections": [
+          {
+            "title": "Sign dimensions:", 
+            "content": "4ft x 4ft to 4ft x 8ft | 1 side or 2 double-sided sides"
+          }
+        ]
+      },
+      {
+        "title": "Installation Service with Boom Lift",
+        "description1": "High-rise installation on exterior building. Installation can be performed using professional equipment up to a maximum height of approximately 35 feet (3rd floor approximately).",
+        "description2": "",
+        "sections": [
+          {
+            "title": "Type of signage:", 
+            "content": "Sign | Poster | Panel | Banner | Vinyl | Window decal | Other"
+          }
+        ]
+      },
+      {
+        "title": "Commercial Wall Installation with Ladder",
+        "description1": "The sign is screwed into the wall, or into the brick joint depending on the wall's condition, to ensure durability. Installation can be performed using a ladder up to a maximum height of approximately 20 feet (2nd floor approximately).",
+        "description2": "",
+        "sections": [
+          {
+            "title": "Sign dimensions:", 
+            "content": "Up to 4ft x 8ft"
+          }
+        ]
+      }
+         
+    ]
+  },
+  "shop": {
+    "title" : "Shop",
+    "categories" : {
+      "all" : "All",
+      "keyboxes" : "Keyboxes",
+      "anchors" : "Anchors",
+      "commercial" : "Commercial",
+      "hardware" : "Hardware",
+      "poles" : "Poles"
+    },
+    "addToCart": "Add to cart"
+  },
   "becomeMember": {
     "title": "Account Opening",
     "subTitle": "Becoming a member at PANCARTE EXPRESS means enjoying numerous benefits",

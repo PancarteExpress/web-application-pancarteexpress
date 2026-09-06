@@ -98,10 +98,26 @@ export default function SignupPage() {
 
       setSuccess(t('feedbackMessages.successUserCreated'));
 
-      // Redirect vers verify-email après 1.5s
-      setTimeout(() => {
-        router.push(`/${locale}/auth/verify-email?email=${encodeURIComponent(email.trim().toLowerCase())}`);
-      }, 1500);
+      // Setter le cookie et rediriger vers dashboard
+      if (result.token) {
+        // Créer une route API pour setter le cookie
+        const csrfRes = await fetch(`/api/${locale}/auth/csrf`);
+        const csrfData = await csrfRes.json();
+
+        await fetch(`/api/${locale}/auth/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfData.token,
+          },
+          body: JSON.stringify({ token: result.token }),
+        });
+
+        // Rediriger vers dashboard
+        setTimeout(() => {
+          window.location.href = `/${locale}/dashboard`;
+        }, 1000);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : t('feedbackMessages.errorNetwork'));
     } finally {

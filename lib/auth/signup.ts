@@ -1,8 +1,8 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { hashPassword, generateVerificationCode, getDefaultGroupName } from '@/lib/auth/utils';
-import { sendEmail } from '../sendEmail';
+import { hashPassword, getDefaultGroupName } from '@/lib/auth/utils';
+import { signJWT } from '@/lib/auth/jwt';
 
 type SignupInput = {
   firstName: string;
@@ -19,6 +19,8 @@ type SignupResult = {
   success: boolean;
   error?: string;
   message?: string;
+  token?: string;
+  redirect?: string;
 };
 
 export async function signup(input: SignupInput): Promise<SignupResult> {
@@ -73,7 +75,7 @@ export async function signup(input: SignupInput): Promise<SignupResult> {
     // Hash password
     const passwordHash = await hashPassword(input.password);
 
-    // Créer user
+    // Créer user directement (sans verification)
     const user = await prisma.user.create({
       data: {
         email: input.email.toLowerCase(),
@@ -84,45 +86,23 @@ export async function signup(input: SignupInput): Promise<SignupResult> {
         companyName: input.companyName?.trim() || null,
         groupId: group.id,
         role: input.isGroup && input.groupName ? 'user' : 'groupAdmin',
+        emailVerified: new Date(), // ← Email vérifié immédiatement
       },
     });
 
-    // Générer code 6 chiffres
-    const code = generateVerificationCode();
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 min
-
-    // Créer VerificationCode
-    await prisma.verificationCode.create({
-      data: {
-        code,
-        email: user.email,
-        userId: user.id,
-        expiresAt,
-      },
+    // Générer JWT
+    const token = await signJWT({
+      userId: user.id,
+      email: user.email,
+      role: user.role as 'user' | 'groupAdmin' | 'superAdmin',
+      groupId: user.groupId,
     });
-
-    // Envoyer email avec code
-    const emailResult = await sendEmail({
-      to: user.email,
-      subject: 'Vérifiez votre email - Code de confirmation',
-      html: `
-        <h2>Bienvenue ${user.firstName} ${user.lastName},</h2>
-        <p>Entrez ce code pour activer votre compte:</p>
-        <h1 style="font-size: 32px; letter-spacing: 5px; text-align: center;">${code}</h1>
-        <p>Le code expire dans 15 minutes.</p>
-        <p>Pancarte Express</p>
-      `,
-    });
-
-    if (!emailResult.success) {
-      // Supprimer l'user s'il y a erreur email
-      await prisma.user.delete({ where: { id: user.id } });
-      return { success: false, error: 'Erreur lors de l\'envoi de l\'email' };
-    }
 
     return {
       success: true,
-      message: 'Compte créé. Vérifiez votre email pour le code de confirmation',
+      message: 'Compte créé avec succès',
+      token,
+      redirect: '/dashboard',
     };
   } catch (error) {
     console.error('Erreur signup:', error);

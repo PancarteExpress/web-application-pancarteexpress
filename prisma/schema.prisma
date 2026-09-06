@@ -38,6 +38,7 @@ model User {
   verificationCodes  VerificationCode[]
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  cartItems CartItem[]
 
   @@index([groupId])
   @@index([email])
@@ -69,4 +70,49 @@ model ForgotPasswordCode {
 
   @@unique([email])
   @@index([email])
+}
+
+model Categories {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+
+  @@map("categories")
+}
+
+
+model Product {
+  id            Int       @id @default(autoincrement())
+  name_fr       String
+  name_en       String?
+  description   String?
+  price         Float
+  original_price Float?
+  image_url     String?
+  categoryId    Int
+  category      Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  cartItems     CartItem[]
+  is_active     Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  @@index([categoryId])
+  @@map("products")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, userId])
+  @@index([userId])
 }
