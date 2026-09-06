@@ -17,6 +17,7 @@ export async function DELETE(
 ) {
   try {
     const { productId } = await params;
+    const productIdNum = parseInt(productId, 10);
 
     // Vérifier JWT
     const token = req.cookies.get('session')?.value;
@@ -38,7 +39,7 @@ export async function DELETE(
 
     // Supprimer l'item du panier
     await prisma.cartItem.deleteMany({
-      where: { productId, userId },
+      where: { productId: productIdNum, userId },
     });
 
     // Retourner le panier mis à jour
