@@ -33,6 +33,7 @@ export async function GET(
         { status: 401 }
       );
     }
+    const userId = payload.userId as string;
 
     // Récupérer le panier
     const cartItems = await prisma.cartItem.findMany({

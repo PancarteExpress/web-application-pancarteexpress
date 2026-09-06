@@ -75,11 +75,11 @@ export async function POST(
       include: { product: true },
     });
 
-    const items = allItems.map((item) => ({
+    const items = (allItems  as CartItemWithProduct[]).map((item) => ({
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
-      name: item.product.name_fr, // ← Utilise name_fr
+      name: item.product.name_fr,
     }));
 
     return NextResponse.json({
