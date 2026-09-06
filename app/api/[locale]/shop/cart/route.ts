@@ -45,7 +45,7 @@ export async function GET(
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
-      name: item.product.name_fr, // ← Utilise name_fr
+      name: item.product.name_fr,
     }));
 
     return NextResponse.json({
@@ -132,7 +132,7 @@ export async function POST(
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
-      name: item.product.name,
+      name: item.product.name_fr,
     }));
 
     return NextResponse.json({
