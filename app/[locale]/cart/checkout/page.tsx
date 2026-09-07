@@ -32,6 +32,7 @@ function CheckoutForm() {
     const [email, setEmail] = useState("");
     const [shippingAddress, setShippingAddress] = useState("");
     const [isHydrated, setIsHydrated] = useState(false);
+    const [deliveryMode, setDeliveryMode] = useState<'pickup' | 'delivery'>('delivery');
     
     // Traducteur
     const t = useTranslations('checkout');
@@ -95,7 +96,7 @@ function CheckoutForm() {
             return;
         }
 
-        if (!shippingAddress.trim()) {
+        if (deliveryMode == "delivery" && !shippingAddress.trim()) {
             setError("Adresse de livraison requise");
             return;
         }
@@ -172,9 +173,11 @@ function CheckoutForm() {
                     <p>Bonjour ${prenom} ${nom},</p>
                     <p>Votre commande #${orderData.orderId} : a été confirmée.</p>
                     <p>
+                        ${shippingAddress ? `
                         <h5>Adresse de livraison :</h5>
                             - ${shippingAddress}
-
+                        ` : '<h3>Nous communiquerons avec vous lorsque les articles seront pret</h3>'}
+                
                         <h5>Produits :</h5>
                         ${cart.map(item => `
                             <p>${item.name_fr} x${item.quantity}</p>
@@ -360,36 +363,62 @@ function CheckoutForm() {
                     )}
 
                     <div className={styles.section}>
-                        <h3>{t('shippingAddress')}</h3>
+                        <div className={styles.radioGroup}>
+                            <label className={styles.radioLabel}>
+                                <input
+                                    className={styles.radioInput}
+                                    type="radio"
+                                    name="deliveryMode"
+                                    value="pickup"
+                                    checked={deliveryMode === 'pickup'}
+                                    onChange={(e) => setDeliveryMode('pickup' as const)}
+                                />
+                                <div className={styles.radioButton} style={{ borderRadius: '10px 0 0 10px' }}>Ramassage</div>
+                            </label>
+
+                            <label className={styles.radioLabel}>
+                                <input
+                                    className={styles.radioInput}
+                                    type="radio"
+                                    name="deliveryMode"
+                                    value="delivery"
+                                    checked={deliveryMode === 'delivery'}
+                                    onChange={(e) => setDeliveryMode('delivery' as const)}
+                                />
+                                <div className={styles.radioButton} style={{ borderRadius: '0 10px 10px 0' }}>Livraison</div>
+                            </label>
+                        </div>
+
+                        {deliveryMode === 'pickup' &&
                         <div className={styles.formGroup}>
-                            <label htmlFor="shipping">{t('address')}</label>
-                            <AddressAutocomplete 
-                                id="adresse2" 
+                            <label htmlFor="shipping">Adresse de ramassage</label>
+                            Nous vous enverrons un courriel lorsque votre article sera pret a etre ramasser 
+                        </div>}
+
+
+                        {deliveryMode === 'delivery' &&
+                        <div className={styles.formGroup}>
+                            <label htmlFor="shipping">{t('address')} de livraison</label>
+                            {<AddressAutocomplete 
+                                key="delivery-address"
+                                id="delivery-address" 
                                 value={shippingAddress} 
                                 onChange={setShippingAddress}
-                            />
-                        </div>
-                        <h3>{t('shippingAddress')}</h3>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="shipping">{t('address')}</label>
-                            <AddressAutocomplete 
-                                id="adresse2" 
-                                value={shippingAddress} 
-                                onChange={setShippingAddress}
-                            />
-                        </div>
+                            />}
+                        </div>}
                     </div>
 
                     <div className={styles.section}>
                         {error && <p className={styles.error}>{error}</p>}
-                        {success && <p className={styles.success}>{success}</p>}
                         {loading && <p className={styles.loading}>{loading}</p>}
+                        {success && <p className={styles.success}>{success}</p>}
+                        {!success &&
                         <button 
                             type="submit"
                             disabled={cart.length === 0}
                             >
                             {t('makePay')}
-                        </button>
+                        </button>}
                     </div>
                 </form>
             </div>

@@ -351,6 +351,34 @@
     },
     "addToCart": "Ajouter au panier"
   },
+  "contact": {
+    "title": "Contact",
+    "ourCooronates": "Nos coordonnées",
+    "officePhone": "Téléphone bureau",
+    "representativeMobile": "Cellulaire representant",
+    "email": "Courriel",
+    "ourAddress": "Notre adresse",
+    "contactUs": "Nous contacter",
+    "fullName": "Nom complet",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "phone": "Téléphone",
+    "office": "Bureau / # poste",
+    "companyName": "Nom de l'entreprise",
+    "reason": "Raison de votre demande",
+    "send": "Envoyer ma demande",
+    "feedbackMessages": {
+      "missingFirstName" : "Prénom requis",
+      "missingLastName" : "Nom requis",
+      "missingPhoneNumber" : "Téléphone requis",
+      "missingEmail" : "Courriel requis",
+      "missingRequest" : "La raison de votre demande est requise",
+      "errorNetwork" : "Il y a eu un erreur réseau",
+      "errorSendingMessage" : "Il y a eu une erreur lors de l'envoi",
+      "loadingSendingMessage" : "Envoi du message en cours...",
+      "successMessageSent" : "Votre message a été envoyé avec succès !"      
+    }
+  },
   "cart": {
     "title" : "Panier",
     "column1" : "Produit",

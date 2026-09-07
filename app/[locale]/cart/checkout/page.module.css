@@ -117,7 +117,45 @@
     flex-direction: column;
     gap: 12px;
 }
- 
+
+.mainContainer .container .form .section .radioGroup {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+}
+
+.mainContainer .container .form .section .radioGroup .radioLabel {
+  flex: 1;
+  position: relative;
+}
+
+.mainContainer .container .form .section .radioGroup .radioInput {
+  display: none;
+}
+
+.radioInput:checked + .radioButton {
+  background-color: #0E3A8C;
+}
+
+.radioInput:not(:checked) + .radioButton {
+  background-color: #F8FAFD;
+}
+
+.mainContainer .container .form .section .radioGroup .radioButton {
+    
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 2px solid #D8E8F8;
+  color: #92a0b1;
+  font-weight: 900;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
 .mainContainer .container .form .section:last-child {
     border-bottom: none;
 }
@@ -176,8 +214,6 @@
     border-color: #0E4D9A;
     background: white;
 }
-
-
 
 .mainContainer .container .form .section .cardRow {
     display: grid;

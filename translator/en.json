@@ -350,6 +350,34 @@
     },
     "addToCart": "Add to cart"
   },
+  "contact": {
+    "title": "Contact",
+    "ourCooronates": "Our coordinates",
+    "officePhone": "Office phone",
+    "representativeMobile": "Representative's phone",
+    "email": "Email",
+    "ourAddress": "Our address",
+    "contactUs": "Contact us",
+    "fullName": "Full name",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone",
+    "office": "Office / Unit #",
+    "companyName": "Company name",
+    "reason": "Reason for Your Request",
+    "send": "Send my request",
+    "feedbackMessages": {
+      "missingFirstName" : "First name required",
+      "missingLastName" : "Last name required",
+      "missingPhoneNumber" : "Phone number required",
+      "missingEmail" : "Email required",
+      "missingRequest" : "Reason for your request is required",
+      "errorNetwork" : "A network error occurred",
+      "errorSendingMessage" : "An error occurred while sending the message",
+      "loadingSendingMessage" : "Sending message in progress...",
+      "successMessageSent" : "Your message was sent successfully!"      
+    }
+  },
   "cart": {
     "title" : "Cart",
     "column1" : "Product",
