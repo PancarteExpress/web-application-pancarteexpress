@@ -87,7 +87,7 @@ function VerifyForgotPasswordClient() {
 
       setTimeout(() => {
         router.push(`/${locale}/auth/reset-password?email=${encodeURIComponent(email)}`);
-      }, 1000);
+      });
     } catch (err) {
       setError('Erreur réseau');
     } finally {

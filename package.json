@@ -14,6 +14,8 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
     "@prisma/client": "^5.22.0",
+    "@stripe/react-stripe-js": "^6.9.0",
+    "@stripe/stripe-js": "^9.15.0",
     "bcryptjs": "^3.0.3",
     "csrf": "^3.1.0",
     "framer-motion": "^13.2.0",
@@ -24,7 +26,8 @@
     "nodemailer": "^7.0.13",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "react-icons": "^5.7.0"
+    "react-icons": "^5.7.0",
+    "stripe": "^22.6.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

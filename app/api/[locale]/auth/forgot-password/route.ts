@@ -25,7 +25,7 @@ export async function POST(
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Email non trouvé' },
+        { error: "Cet email n'est pas enregistré" },
         { status: 404 }
       );
     }

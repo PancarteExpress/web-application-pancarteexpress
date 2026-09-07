@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyJWT } from '@/lib/auth/jwt';
 
-type CartItemWithProduct = {
+type CartItem = {
   productId: number;
   quantity: number;
-  product: {
-    price: number;
-    name_fr: string;
-    name_en: string | null;
-  };
+  price: number;
+  name: string;
+  name_fr: string;
+  name_en: string | null;
+  image_url: string | null;
 };
 
 export async function POST(
@@ -48,23 +48,22 @@ export async function POST(
     // Fusionner le panier localStorage avec la BD
     for (const item of cartItems) {
       const { productId, quantity } = item;
+      const productIdNum = parseInt(productId, 10); // ← Convertir en number
 
-      if (!productId || !quantity) continue;
+      if (!productIdNum || !quantity) continue;
 
       const existing = await prisma.cartItem.findUnique({
-        where: { productId_userId: { productId, userId } },
+        where: { productId_userId: { productId: productIdNum, userId } }, // ← Utilise productIdNum
       });
 
       if (existing) {
-        // Si existe déjà en BD, ajouter la quantité
         await prisma.cartItem.update({
           where: { id: existing.id },
           data: { quantity: existing.quantity + quantity },
         });
       } else {
-        // Créer un nouvel item
         await prisma.cartItem.create({
-          data: { productId, userId, quantity },
+          data: { productId: productIdNum, userId, quantity }, // ← Utilise productIdNum
         });
       }
     }
@@ -75,11 +74,14 @@ export async function POST(
       include: { product: true },
     });
 
-    const items = (allItems  as CartItemWithProduct[]).map((item) => ({
+    const items = allItems.map((item): CartItem => ({
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
       name: item.product.name_fr,
+      name_fr: item.product.name_fr,
+      name_en: item.product.name_en,
+      image_url: item.product.image_url,
     }));
 
     return NextResponse.json({

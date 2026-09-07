@@ -44,8 +44,8 @@ function ResetPasswordClient() {
       return;
     }
 
-    if (password.length < 8) {
-      setError('Le mot de passe doit contenir au moins 8 caractères');
+    if (password.length < 3) {
+      setError('Le mot de passe doit contenir au moins 3 caractères');
       return;
     }
 
@@ -88,7 +88,7 @@ function ResetPasswordClient() {
 
       setTimeout(() => {
         router.push(`/${locale}/auth/signin`);
-      }, 1500);
+      });
     } catch (err) {
       setError('Erreur réseau');
     } finally {

@@ -28,13 +28,14 @@ export default function SignupPage() {
   // UI states
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(null);
     setError(null);
     setSuccess(null);
-
+    
     // Validation
     if (isGroup && !groupName.trim()) {
       setError(t('feedbackMessages.missingGroupName'));
@@ -76,7 +77,7 @@ export default function SignupPage() {
       return;
     }
 
-    setLoading(true);
+    setLoading("Tentative de création du compte...");
 
     try {
       // Appeler Server Action
@@ -96,6 +97,7 @@ export default function SignupPage() {
         return;
       }
 
+      setLoading(null);
       setSuccess(t('feedbackMessages.successUserCreated'));
 
       // Setter le cookie et rediriger vers dashboard
@@ -119,9 +121,10 @@ export default function SignupPage() {
         }, 1000);
       }
     } catch (err) {
+      setLoading(null);
       setError(err instanceof Error ? err.message : t('feedbackMessages.errorNetwork'));
     } finally {
-      setLoading(false);
+      setLoading(null);
     }
   };
 
@@ -380,8 +383,8 @@ export default function SignupPage() {
             <div className={styles.field}>
               {error && <p className={styles.error}>{error}</p>}
               {success && <p className={styles.success}>{success}</p>}
-              {loading && <p className={styles.loading}>En cours...</p>}
-              <button type="submit" disabled={loading}>
+              {loading && <p className={styles.loading}>{loading}</p>}
+              <button type="submit">
                 {loading ? t('feedbackMessages.loadingUserCreation') : t('join')}
               </button>
             </div>

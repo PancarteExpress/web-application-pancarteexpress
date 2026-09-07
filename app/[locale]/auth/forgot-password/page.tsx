@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
 
       setTimeout(() => {
         router.push(`/${locale}/auth/verify-forgot-password?email=${encodeURIComponent(email.trim().toLowerCase())}`);
-      }, 1500);
+      });
     } catch (err) {
       setError('Erreur réseau');
     } finally {
@@ -106,7 +106,7 @@ export default function ForgotPasswordPage() {
         <div className={styles.submit}>
           <div className={styles.feedback}>
             {error && <p className={styles.error}>{error}</p>}
-            {isFetching && <p className={styles.loading}>Envoi en cours...</p>}
+            {isFetching && <p className={styles.loading}>Tentative d'envoi en cours...</p>}
           </div>
 
           <button type="submit" disabled={isFetching}>

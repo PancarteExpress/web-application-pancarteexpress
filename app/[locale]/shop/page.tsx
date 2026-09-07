@@ -81,7 +81,7 @@ export default function Shop() {
         const price = parseFloat(product.price);
         const name = locale === 'en' ? product.name_en || product.name_fr : product.name_fr;
 
-        await addToCart(productId, 1, price, name);
+        await addToCart(productId, 1, price, name, product.name_fr, product.name_en, product.image_url);
         
         setAddedItems([...addedItems, product.id]);
         setTimeout(() => {

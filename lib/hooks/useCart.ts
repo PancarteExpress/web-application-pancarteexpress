@@ -9,6 +9,9 @@ export type CartItem = {
   quantity: number;
   price: number;
   name: string;
+  name_fr: string;
+  name_en: string | null;
+  image_url: string | null;
 };
 
 export function useCart() {
@@ -62,11 +65,10 @@ export function useCart() {
   };
 
   const addToCart = useCallback(
-    async (productId: string, quantity: number, price: number, name: string) => {
+    async (productId: string, quantity: number, price: number, name: string, name_fr: string, name_en: string | null, image_url: string | null) => {
       setIsLoading(true);
       try {
         if (session.authenticated) {
-          // Ajouter à la BD
           const res = await fetch(`/api/${locale}/shop/cart`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -87,7 +89,7 @@ export function useCart() {
                 : item
             );
           } else {
-            updated = [...cart, { productId, quantity, price, name }];
+            updated = [...cart, { productId, quantity, price, name, name_fr, name_en, image_url }];
           }
           setCart(updated);
           localStorage.setItem('cart', JSON.stringify(updated));

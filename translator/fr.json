@@ -351,6 +351,27 @@
     },
     "addToCart": "Ajouter au panier"
   },
+  "cart": {
+    "title" : "Panier",
+    "column1" : "Produit",
+    "column2" : "Quantité",
+    "column3" : "Prix",
+    "emptyCart" : "Votre panier est vide",
+    "cartTotal" : "Total du panier",
+    "subTotal" : "Sous-total",
+    "validateCart" : "Valider la commande"
+  },
+  "checkout": {
+    "title" : "Finaliser votre commande",
+    "cartSummary" : "Résumé du panier",
+    "paymentData" : "Informations de facturation",
+    "firstname" : "Prénom",
+    "lastname" : "Nom",
+    "cardNumber" : "Numéro de carte",
+    "address" : "Adresse",
+    "shippingAddress" : "Adresse de livraison",
+    "makePay" : "Procéder au paiement"
+  },
   "becomeMember": {
     "title": "Ouverture de compte",
     "subTitle": "Devenir membre chez PANCARTE EXPRESS c'est bénéficier de nombreux avantages",
@@ -419,6 +440,7 @@
       "missingPassword" : "Mot de passe requis"
     }
   },
+  "addressAutoComplete" : "Commencez à taper l'adresse...",
   "footer": {
     "politics" : {
       "quote1": "Votre service téléphonique est disponible en tout temps (boîte vocale). Pour les demandes en ligne, notre service est disponible 24h/24, 7 jours/7.",

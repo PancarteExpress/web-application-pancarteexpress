@@ -101,7 +101,7 @@ export default function SigninPage() {
       // Redirection après connexion réussie
       setTimeout(() => {
         window.location.href = `/${locale}${data.redirect}`;
-      }, 1000);
+      });
     } catch (err) {
       setError(feedbackMessages('errorNetwork'));
     } finally {
@@ -163,7 +163,7 @@ export default function SigninPage() {
         <div className={styles.submit}>
           <div className={styles.feedback}>
             {error && <p className={styles.error}>{error}</p>}
-            {isFetching && <p className={styles.loading}>Connexion en cours...</p>}
+            {isFetching && <p className={styles.loading}>Tentative de connexion en cours...</p>}
           </div>
 
           <button type="submit" disabled={isFetching}>

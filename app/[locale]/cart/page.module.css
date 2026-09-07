@@ -1,0 +1,233 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ─── Hero ─── */
+
+.mainContainer .hero {
+    width: 100%;
+    height: 125px;
+
+    /*
+    background-image: url('/hero/hero.jpg');
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainContainer .hero label {
+    font-family: 'Montserrat', sans-serif;;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+/* ─── Cart container ─── */
+
+.mainContainer .cartContainer {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px 0 40px;
+}
+
+@media (max-width: 1650px) { .mainContainer .cartContainer { width: 80%; } }
+@media (max-width: 1500px) { .mainContainer .cartContainer { width: 95%; } }
+
+/* ─── Products table ─── */
+
+.mainContainer .cartContainer .products table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mainContainer .cartContainer .products table th {
+    padding: 10px 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #5F7FA8;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    text-align: left;
+    border-bottom: 2px solid #EEF4FB;
+}
+
+.mainContainer .cartContainer .products table th:nth-child(2),
+.mainContainer .cartContainer .products table th:nth-child(3) {
+    text-align: center;
+}
+
+.mainContainer .cartContainer .products table td {
+    padding: 14px 12px;
+    vertical-align: middle;
+    text-align: center;
+    border-bottom: 1px solid #F4F6F9;
+    color: #1A1A2E;
+    font-weight: 600;
+}
+
+.mainContainer .cartContainer .products table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ─── Product cell ─── */
+
+.mainContainer .cartContainer .products .product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+}
+
+.mainContainer .cartContainer .products .product .deleteButton {
+    all: unset;
+    cursor: pointer;
+    color: #C5D8EF;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color .15s;
+}
+
+.mainContainer .cartContainer .products .product .deleteButton:hover {
+    color: #C62828;
+}
+
+.mainContainer .cartContainer .products .product .imageContainer {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1px solid #D8E8F8;
+    background: #F4F6F9;
+    padding: 4px;
+}
+
+.mainContainer .cartContainer .products .product label {
+    color: #1A1A2E;
+    flex-grow: 1;
+    cursor: default;
+}
+
+/* ─── Qty input ─── */
+
+.mainContainer .cartContainer .products table input[type="number"] {
+    width: 56px;
+    padding: 5px 8px;
+    border: 1px solid #D8E8F8;
+    border-radius: 10px;
+    text-align: center;
+    background: #fff;
+    outline: none;
+}
+
+.mainContainer .cartContainer .products table input[type="number"]:focus {
+    border-color: #0E4D9A;
+}
+
+/* ─── Purchase / summary ─── */
+
+.mainContainer .cartContainer .purchase {
+    display: flex;
+}
+
+@media (max-width: 700px) { .mainContainer .cartContainer .purchase { flex-direction: column; } }
+
+.mainContainer .cartContainer .purchase .left {
+    flex: 1;
+}
+
+.mainContainer .cartContainer .purchase .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mainContainer .cartContainer .purchase .right > label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #5F7FA8;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    border-bottom: 2px solid #EEF4FB;
+    padding-bottom: 8px;
+    display: block;
+}
+
+.mainContainer .cartContainer .purchase .right .summary {
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContainer .cartContainer .purchase .right .summary .summaryRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #F4F6F9;
+}
+
+.mainContainer .cartContainer .purchase .right .summary .summaryRow:last-child {
+    border-bottom: none;
+    padding-top: 12px;
+}
+
+.mainContainer .cartContainer .purchase .right .summary .summaryRow .label {
+    color: #5F7FA8;
+    font-weight: 400;
+}
+
+.mainContainer .cartContainer .purchase .right .summary .summaryRow:last-child .label {
+    font-weight: 700;
+    color: #092E5B;
+}
+
+.mainContainer .cartContainer .purchase .right .summary .summaryRow .value {
+    font-weight: 600;
+    color: #1A1A2E;
+}
+
+.mainContainer .cartContainer .purchase .right .summary .summaryRow:last-child .value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #092E5B;
+}
+
+.mainContainer .cartContainer .purchase .right button {
+    all: unset;
+    display: block;
+    width: 100%;
+    padding: 11px;
+    background: #0E4D9A;
+    color: white;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    letter-spacing: .03em;
+    transition: background .15s;
+    box-sizing: border-box;
+}
+
+.mainContainer .cartContainer .purchase .right button:hover:not(:disabled) {
+    background: #092E5B;
+}
+
+.mainContainer .cartContainer .purchase .right button:disabled {
+    background: #C5D8EF;
+    cursor: not-allowed;
+}

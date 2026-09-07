@@ -350,6 +350,27 @@
     },
     "addToCart": "Add to cart"
   },
+  "cart": {
+    "title" : "Cart",
+    "column1" : "Product",
+    "column2" : "Quantity",
+    "column3" : "Price",
+    "emptyCart" : "Your cart is empty",
+    "cartTotal" : "Cart total",
+    "subTotal" : "Sub-total",
+    "validateCart" : "Go to checkout"
+  },
+  "checkout": {
+    "title" : "Complete Your Order",
+    "cartSummary" : "Shopping Cart Summary",
+    "paymentData" : "Billing information",
+    "firstname" : "First name",
+    "lastname" : "Last name",
+    "cardNumber" : "Card number",
+    "address" : "Address",
+    "shippingAddress" : "Shipping address",
+    "makePay" : "Complete Payment"
+  },
   "becomeMember": {
     "title": "Account Opening",
     "subTitle": "Becoming a member at PANCARTE EXPRESS means enjoying numerous benefits",
@@ -418,6 +439,7 @@
       "missingPassword" : "Password required"   
     }
   },
+  "addressAutoComplete" : "Start typing the address...",
   "footer": {
     "politics" : {
       "quote1": "Your phone service is available at all times (voicemail). For online requests, our service is available 24/7.",

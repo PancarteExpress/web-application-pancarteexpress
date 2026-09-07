@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyJWT } from '@/lib/auth/jwt';
 
-type CartItemWithProduct = {
+type CartItem = {
   productId: number;
   quantity: number;
-  product: {
-    price: number;
-    name_fr: string;
-    name_en: string | null;
-  };
+  price: number;
+  name: string;
+  name_fr: string;
+  name_en: string | null;
+  image_url: string | null;
 };
 
 export async function DELETE(
@@ -49,11 +49,14 @@ export async function DELETE(
       include: { product: true },
     });
 
-    const items = cartItems.map((item) => ({
+    const items = cartItems.map((item): CartItem => ({
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
-      name: item.product.name_fr, // ← Utilise name_fr
+      name: item.product.name_fr,
+      name_fr: item.product.name_fr,
+      name_en: item.product.name_en,
+      image_url: item.product.image_url,
     }));
 
     return NextResponse.json({
