@@ -359,9 +359,18 @@ function CheckoutForm() {
                     </div>
                     )}
 
-                        <div className={styles.section}>
-                            <h3>{t('shippingAddress')}</h3>
-                            <div className={styles.formGroup}>
+                    <div className={styles.section}>
+                        <h3>{t('shippingAddress')}</h3>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="shipping">{t('address')}</label>
+                            <AddressAutocomplete 
+                                id="adresse2" 
+                                value={shippingAddress} 
+                                onChange={setShippingAddress}
+                            />
+                        </div>
+                        <h3>{t('shippingAddress')}</h3>
+                        <div className={styles.formGroup}>
                             <label htmlFor="shipping">{t('address')}</label>
                             <AddressAutocomplete 
                                 id="adresse2" 
