@@ -433,7 +433,7 @@
     "password": "Mot de passe",
     "firstPassword": "Saisir le mot de passe",
     "confirmPassword": "Confirmer le mot de passe",
-    "pickupMaterial": "Devenons nous ramasser votre matériel ? ",
+    "pickupMaterial": "Devons nous ramasser votre matériel ? ",
     "yesPickup": "Oui, à une adresse particulière",
     "pickupAddress": "Veuillez tapper l'adresse de ramassage",
     "noPickup": "Non, le matériel sera déposé à l'entrepôt",

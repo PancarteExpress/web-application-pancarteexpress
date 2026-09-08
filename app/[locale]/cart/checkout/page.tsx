@@ -248,12 +248,6 @@ function CheckoutForm() {
     }, []);
 
     useEffect(() => {
-        if (isHydrated && cart.length === 0 && !success) {
-            router.push(`/${locale}/cart`);
-        }
-    }, [isHydrated, cart, locale, router, success]);
-
-    useEffect(() => {
         if (document.querySelector('script[src*="maps.googleapis.com"]')) return;
         
         const script = document.createElement('script');
