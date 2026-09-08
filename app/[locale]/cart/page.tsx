@@ -28,7 +28,8 @@ export default function Cart() {
   const { cart, removeFromCart, isLoading } = useCart();
   
   // Control quantities if they change in the cart
-  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+  const [quantities, setQuantities] = useState<Record<number, number>>({});
+
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Control the prices
@@ -38,7 +39,7 @@ export default function Cart() {
   const tax = subtotal * 0.15;
   const total = subtotal + tax;
 
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
+  const handleQuantityChange = (productId: number, newQuantity: number) => {
     if (newQuantity < 1) return;
     setQuantities(prev => ({
       ...prev,
