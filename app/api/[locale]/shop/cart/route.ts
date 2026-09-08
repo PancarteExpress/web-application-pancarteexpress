@@ -17,31 +17,23 @@ export async function GET(
   { params: _params }: { params: Promise<{ locale: string }> }
 ) {
   try {
-    // Vérifier JWT
     const token = req.cookies.get('session')?.value;
     if (!token) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
     }
 
     const payload = await verifyJWT(token);
     if (!payload) {
-      return NextResponse.json(
-        { error: 'Token invalide' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Token invalide' }, { status: 401 });
     }
     const userId = payload.userId as string;
 
-    // Récupérer le panier
     const cartItems = await prisma.cartItem.findMany({
       where: { userId },
       include: { product: true },
     });
 
-    const items = cartItems.map((item): CartItem => ({
+    const items: CartItem[] = cartItems.map(item => ({
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
@@ -51,16 +43,10 @@ export async function GET(
       image_url: item.product.image_url,
     }));
 
-    return NextResponse.json({
-      success: true,
-      items,
-    });
+    return NextResponse.json({ success: true, items });
   } catch (error) {
-    console.error('Erreur GET cart:', error);
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    );
+    console.error('[GET /cart]', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
 
@@ -69,47 +55,35 @@ export async function POST(
   { params: _params }: { params: Promise<{ locale: string }> }
 ) {
   try {
-    // Vérifier JWT
     const token = req.cookies.get('session')?.value;
     if (!token) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
     }
 
     const payload = await verifyJWT(token);
     if (!payload) {
-      return NextResponse.json(
-        { error: 'Token invalide' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Token invalide' }, { status: 401 });
     }
     const userId = payload.userId as string;
 
     const body = await req.json();
-    const { productId, quantity } = body;
+    let { productId, quantity } = body;
 
-    if (!productId || !quantity) {
-      return NextResponse.json(
-        { error: 'productId et quantity requis' },
-        { status: 400 }
-      );
+    // ✅ Normaliser productId en number
+    productId = typeof productId === 'string' ? parseInt(productId, 10) : productId;
+
+    if (!productId || !quantity || isNaN(productId)) {
+      return NextResponse.json({ error: 'Données invalides' }, { status: 400 });
     }
 
-    // Vérifier que le produit existe
     const product = await prisma.product.findUnique({
       where: { id: productId },
     });
 
     if (!product) {
-      return NextResponse.json(
-        { error: 'Produit non trouvé' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Produit non trouvé' }, { status: 404 });
     }
 
-    // Ajouter ou mettre à jour le panier
     const existing = await prisma.cartItem.findUnique({
       where: { productId_userId: { productId, userId } },
     });
@@ -125,13 +99,12 @@ export async function POST(
       });
     }
 
-    // Retourner le panier mis à jour
     const cartItems = await prisma.cartItem.findMany({
       where: { userId },
       include: { product: true },
     });
 
-    const items = cartItems.map((item): CartItem => ({
+    const items: CartItem[] = cartItems.map(item => ({
       productId: item.productId,
       quantity: item.quantity,
       price: item.product.price,
@@ -141,15 +114,9 @@ export async function POST(
       image_url: item.product.image_url,
     }));
 
-    return NextResponse.json({
-      success: true,
-      items,
-    });
+    return NextResponse.json({ success: true, items });
   } catch (error) {
-    console.error('Erreur POST cart:', error);
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    );
+    console.error('[POST /cart]', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }

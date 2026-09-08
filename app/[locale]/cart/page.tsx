@@ -25,7 +25,7 @@ export default function Cart() {
   const router = useRouter();
 
   // Access to the Cart (Globally)
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, isLoading } = useCart();
   
   // Control quantities if they change in the cart
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});

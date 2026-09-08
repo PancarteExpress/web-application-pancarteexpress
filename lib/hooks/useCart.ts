@@ -5,7 +5,7 @@ import { useLocale } from 'next-intl';
 import { useSession } from '@/lib/auth/useSession';
 
 export type CartItem = {
-  productId: string;
+  productId: number;
   quantity: number;
   price: number;
   name: string;
@@ -14,121 +14,163 @@ export type CartItem = {
   image_url: string | null;
 };
 
+const CART_STORAGE_KEY = 'cart';
+
 export function useCart() {
   const locale = useLocale();
   const { session } = useSession();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (session.authenticated) {
-      // L'utilisateur vient de se connecter
-      // Synchroniser le panier localStorage avec la BD
-      syncCartOnLogin();
-    } else {
-      // Charger depuis localStorage
-      const stored = localStorage.getItem('cart');
-      setCart(stored ? JSON.parse(stored) : []);
-    }
-  }, [session.authenticated]);
+    const init = async () => {
+      try {
+        setError(null);
+        if (session.authenticated) {
+          localStorage.removeItem(CART_STORAGE_KEY);
+          await loadCartFromDB();
+        } else {
+          const stored = localStorage.getItem(CART_STORAGE_KEY);
+          setCart(stored ? JSON.parse(stored) : []);
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Erreur init panier';
+        setError(msg);
+        console.error('[useCart init]', err);
+        setCart([]); 
+      }
+    };
 
-  const syncCartOnLogin = async () => {
+    init();
+  }, [session.authenticated, locale]);
+
+  // Charger le panier depuis la BD
+  const loadCartFromDB = async () => {
     try {
-      const stored = localStorage.getItem('cart');
-      const localCart = stored ? JSON.parse(stored) : [];
+      const res = await fetch(`/api/${locale}/shop/cart`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-      if (localCart.length > 0) {
-        // Envoyer le panier localStorage à la BD
-        const res = await fetch(`/api/${locale}/shop/cart/sync`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ cartItems: localCart }),
-        });
-
-        const data = await res.json();
-        if (data.success) {
-          setCart(data.items || []);
-          // Effacer localStorage
-          localStorage.removeItem('cart');
-        }
-      } else {
-        // Charger directement depuis la BD
-        const res = await fetch(`/api/${locale}/shop/cart`);
-        const data = await res.json();
-        if (data.success) {
-          setCart(data.items || []);
-        }
+      const data = await res.json();
+      if (data.success) {
+        setCart(data.items || []);
       }
     } catch (err) {
-      console.error('Erreur sync panier:', err);
+      console.error('[loadCartFromDB]', err);
+      throw err;
     }
   };
 
   const addToCart = useCallback(
-    async (productId: string, quantity: number, price: number, name: string, name_fr: string, name_en: string | null, image_url: string | null) => {
+    async (
+      productId: string | number,
+      quantity: number,
+      price: number,
+      name: string,
+      name_fr: string,
+      name_en: string | null,
+      image_url: string | null
+    ) => {
       setIsLoading(true);
+      setError(null);
       try {
+        const productIdNum = typeof productId === 'string' 
+          ? parseInt(productId, 10) 
+          : productId;
+
         if (session.authenticated) {
           const res = await fetch(`/api/${locale}/shop/cart`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ productId, quantity }),
+            body: JSON.stringify({ productId: productIdNum, quantity }),
           });
+
+          if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.error || 'Erreur ajout');
+          }
+
           const data = await res.json();
           if (data.success) {
             setCart(data.items || []);
           }
         } else {
-          // Ajouter à localStorage
-          const existing = cart.find((item) => item.productId === productId);
-          let updated;
-          if (existing) {
-            updated = cart.map((item) =>
-              item.productId === productId
-                ? { ...item, quantity: item.quantity + quantity }
-                : item
-            );
-          } else {
-            updated = [...cart, { productId, quantity, price, name, name_fr, name_en, image_url }];
-          }
-          setCart(updated);
-          localStorage.setItem('cart', JSON.stringify(updated));
+          setCart(prevCart => {
+            const existing = prevCart.find(item => item.productId === productIdNum);
+            let updated: CartItem[];
+
+            if (existing) {
+              updated = prevCart.map(item =>
+                item.productId === productIdNum
+                  ? { ...item, quantity: item.quantity + quantity }
+                  : item
+              );
+            } else {
+              updated = [...prevCart, { 
+                productId: productIdNum, 
+                quantity, 
+                price, 
+                name, 
+                name_fr, 
+                name_en, 
+                image_url 
+              }];
+            }
+
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updated));
+            return updated;
+          });
         }
       } catch (err) {
-        console.error('Erreur ajout panier:', err);
+        const msg = err instanceof Error ? err.message : 'Erreur ajout panier';
+        setError(msg);
+        console.error('[addToCart]', err);
       } finally {
         setIsLoading(false);
       }
     },
-    [session.authenticated, locale, cart]
+    [session.authenticated, locale]
   );
 
   const removeFromCart = useCallback(
-    async (productId: string) => {
+    async (productId: string | number) => {
       setIsLoading(true);
+      setError(null);
       try {
+        const productIdNum = typeof productId === 'string' 
+          ? parseInt(productId, 10) 
+          : productId;
+
         if (session.authenticated) {
-          // Supprimer de la BD
-          const res = await fetch(`/api/${locale}/shop/cart/${productId}`, {
+          const res = await fetch(`/api/${locale}/shop/cart/${productIdNum}`, {
             method: 'DELETE',
           });
+
+          if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.error || 'Erreur suppression');
+          }
+
           const data = await res.json();
           if (data.success) {
             setCart(data.items || []);
           }
         } else {
-          // Supprimer de localStorage
-          const updated = cart.filter((item) => item.productId !== productId);
-          setCart(updated);
-          localStorage.setItem('cart', JSON.stringify(updated));
+          setCart(prevCart => {
+            const updated = prevCart.filter(item => item.productId !== productIdNum);
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updated));
+            return updated;
+          });
         }
       } catch (err) {
-        console.error('Erreur suppression panier:', err);
+        const msg = err instanceof Error ? err.message : 'Erreur suppression';
+        setError(msg);
+        console.error('[removeFromCart]', err);
       } finally {
         setIsLoading(false);
       }
     },
-    [session.authenticated, locale, cart]
+    [session.authenticated, locale]
   );
 
   return {
@@ -136,5 +178,6 @@ export function useCart() {
     addToCart,
     removeFromCart,
     isLoading,
+    error,
   };
 }
