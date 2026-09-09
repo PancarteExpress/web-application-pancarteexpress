@@ -4,13 +4,15 @@ import styles from "./page.module.css";
 import { useState } from "react";
 import UpdateProfile from "./components/updateProfile";
 import { useUser } from "@/lib/hooks/useUser";
+import { useOrders } from "@/lib/hooks/useOrders";
 
 export default function Dashboard() {
 
     const [updateProfile, setUpdateProfile] = useState<boolean>(false);
 
-    const { user, loading } = useUser();
-  
+    const { user, loadingUser } = useUser();
+    const { orders, loadingOrders, error } = useOrders();
+    
     return ( 
         <>
         <div className={styles.mainContainer}>
@@ -62,42 +64,22 @@ export default function Dashboard() {
                     <span>Action</span>
                 </div>
 
-                <div className={styles.orderRow}>
-                    <span className={styles.orderNum}>n°49368</span>
-                    <span className={styles.orderAddr}>8368 13e avenue, Montréal</span>
-                    <span className={styles.orderDate}>14 juin 2026</span>
-                    <span className={`${styles.badge} ${styles.encours}`}>En cours</span>
-                    <button className={styles.voirBtn}>Voir</button>
-                </div>
-                <div className={styles.orderRow}>
-                    <span className={styles.orderNum}>n°49368</span>
-                    <span className={styles.orderAddr}>8368 13e avenue, Montréal</span>
-                    <span className={styles.orderDate}>14 juin 2026</span>
-                    <span className={`${styles.badge} ${styles.encours}`}>En cours</span>
-                    <button className={styles.voirBtn}>Voir</button>
-                </div>
-                <div className={styles.orderRow}>
-                    <span className={styles.orderNum}>n°49368</span>
-                    <span className={styles.orderAddr}>8368 13e avenue, Montréal</span>
-                    <span className={styles.orderDate}>14 juin 2026</span>
-                    <span className={`${styles.badge} ${styles.encours}`}>En cours</span>
-                    <button className={styles.voirBtn}>Voir</button>
-                </div>
+                <div>
+                {orders.length === 0 ? (
+                    <p>Aucune commande</p>
+                ) : (
+                    orders.map(order => (
 
-                <div className={styles.orderRow}>
-                    <span className={styles.orderNum}>n°48537</span>
-                    <span className={styles.orderAddr}>8368 13e avenue, Montréal</span>
-                    <span className={styles.orderDate}>3 juin 2026</span>
-                    <span className={`${styles.badge} ${styles.encours}`}>En cours</span>
-                    <button className={styles.voirBtn}>Voir</button>
-                </div>
-
-                <div className={styles.orderRow}>
-                    <span className={styles.orderNum}>n°48535</span>
-                    <span className={styles.orderAddr}>8368 13e avenue, Montréal</span>
-                    <span className={styles.orderDate}>3 juin 2026</span>
-                    <span className={`${styles.badge} ${styles.termine}`}>Terminée</span>
-                    <button className={styles.voirBtn}>Voir</button>
+                    <div key={order.id} className={styles.orderRow}>
+                        <span className={styles.orderNum}>{order.id.charAt(0)}</span>
+                        <span className={styles.orderAddr}>8368 13e avenue, Montréal</span>
+                        <span className={styles.orderDate}>{order.items.length}</span>
+                        <span className={`${styles.badge} ${styles.encours}`}>{order.status.toUpperCase()}</span>
+                        <button className={styles.voirBtn}>Voir</button>
+                    </div>
+                    
+                    ))
+                )}
                 </div>
             </div>
         </div>

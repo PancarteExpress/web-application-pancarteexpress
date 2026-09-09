@@ -18,7 +18,7 @@ export function useUser() {
   const locale = useLocale();
   const { session } = useSession();
   const [user, setUser] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingUser, setLoadingUser] = useState(false);
 
   useEffect(() => {
     if (!session.authenticated) {
@@ -27,7 +27,7 @@ export function useUser() {
     }
 
     const fetchUser = async () => {
-      setLoading(true);
+      setLoadingUser(true);
       try {
         const res = await fetch(`/api/${locale}/auth/me/profile`);
         const data = await res.json();
@@ -36,12 +36,12 @@ export function useUser() {
         console.error('[useUser]', err);
         setUser(null);
       } finally {
-        setLoading(false);
+        setLoadingUser(false);
       }
     };
 
     fetchUser();
   }, [session.authenticated, locale]);
 
-  return { user, loading };
+  return { user, loadingUser };
 }

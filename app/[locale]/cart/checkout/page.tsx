@@ -60,9 +60,8 @@ function CheckoutForm() {
 
     const session = useSession();
 
-    const { user, loading } = useUser();
+    const { user } = useUser();
     
-
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setError(null);
@@ -124,8 +123,6 @@ function CheckoutForm() {
         }
 
         try {
-
-
             session.session && setLoading("Sending order...");
 
             // 1. Créer la commande

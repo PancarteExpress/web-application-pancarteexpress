@@ -13,24 +13,55 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Créer la commande
-    const order = await prisma.order.create({
-      data: {
+    // ✅ Chercher une commande pending existante
+    const existingOrder = await prisma.order.findFirst({
+      where: {
         email,
-        subtotal,
-        tax,
-        total,
-        shippingAddress,
         status: 'pending',
-        items: {
-          create: items.map((item: any) => ({
-            productId: parseInt(item.productId, 10), // ← Convertir en Int
-            quantity: item.quantity,
-            price: item.price,
-          })),
-        },
       },
     });
+
+    let order;
+
+    if (existingOrder) {
+      // ✅ Mettre à jour la commande existante
+      order = await prisma.order.update({
+        where: { id: existingOrder.id },
+        data: {
+          subtotal,
+          tax,
+          total,
+          shippingAddress,
+          items: {
+            // Ajouter les nouveaux items
+            create: items.map((item: any) => ({
+              productId: parseInt(item.productId, 10),
+              quantity: item.quantity,
+              price: item.price,
+            })),
+          },
+        },
+      });
+    } else {
+      // ✅ Créer une nouvelle commande
+      order = await prisma.order.create({
+        data: {
+          email,
+          subtotal,
+          tax,
+          total,
+          shippingAddress,
+          status: 'pending',
+          items: {
+            create: items.map((item: any) => ({
+              productId: parseInt(item.productId, 10),
+              quantity: item.quantity,
+              price: item.price,
+            })),
+          },
+        },
+      });
+    }
 
     return NextResponse.json({
       success: true,
