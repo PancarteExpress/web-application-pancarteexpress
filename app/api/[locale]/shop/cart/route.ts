@@ -60,32 +60,22 @@ export async function POST(
       return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
     }
 
-    console.log('🔍 [1] Token exists:', !!token);
-
     const payload = await verifyJWT(token);
     if (!payload) {
       return NextResponse.json({ error: 'Token invalide' }, { status: 401 });
     }
-
-    console.log('🔍 [2] Payload:', payload);
-
     const userId = payload.userId as string;
-    console.log('🔍 [3] userId from JWT:', userId);
 
     const userExists = await prisma.user.findUnique({
       where: { id: userId },
     });
-
     if (!userExists) {
-      return NextResponse.json({ error: 'Utilisateur non trouvé en BD' }, { status: 401 });
+      return NextResponse.json({ error: 'Utilisateur non trouvé' }, { status: 401 });
     }
-    
-    console.log('🔍 [4] User exists in DB:', !!userExists);
 
     const body = await req.json();
     let { productId, quantity } = body;
 
-    // ✅ Normaliser productId en number
     productId = typeof productId === 'string' ? parseInt(productId, 10) : productId;
 
     if (!productId || !quantity || isNaN(productId)) {
@@ -100,27 +90,30 @@ export async function POST(
       return NextResponse.json({ error: 'Produit non trouvé' }, { status: 404 });
     }
 
+    // ✅ Chercher le CartItem PEU IMPORTE isInCart
     const existing = await prisma.cartItem.findUnique({
       where: { productId_userId: { productId, userId } },
     });
 
     if (existing) {
-      // ✅ Si l'item était commandé (isInCart: false), le remettre actif
+      // ✅ Toujours mettre à jour + remettre actif
       await prisma.cartItem.update({
         where: { id: existing.id },
         data: { 
           quantity: existing.quantity + quantity,
-          isInCart: true, // ← Remettre actif au cas où
+          isInCart: true, // ← Remmettre actif s'il était commandé
         },
       });
     } else {
+      // Créer nouveau
       await prisma.cartItem.create({
-        data: { productId, userId, quantity },
+        data: { productId, userId, quantity, isInCart: true },
       });
     }
 
+    // ✅ Retourner uniquement les items actifs
     const cartItems = await prisma.cartItem.findMany({
-      where: { userId },
+      where: { userId, isInCart: true },
       include: { product: true },
     });
 

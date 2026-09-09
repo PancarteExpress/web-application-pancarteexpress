@@ -117,7 +117,7 @@ export async function POST(_req: NextRequest, { params: _params }: { params: Pro
       userId: user.id,
       email: user.email,
       role: user.role as 'user' | 'groupAdmin',
-      groupId: user.groupId,
+      groupId: user.groupId || undefined,
     });
 
     // 8. Créer response avec cookie

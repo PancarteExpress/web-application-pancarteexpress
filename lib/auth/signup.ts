@@ -95,7 +95,7 @@ export async function signup(input: SignupInput): Promise<SignupResult> {
       userId: user.id,
       email: user.email,
       role: user.role as 'user' | 'groupAdmin' | 'superAdmin',
-      groupId: user.groupId,
+      groupId: user.groupId || undefined,
     });
 
     return {

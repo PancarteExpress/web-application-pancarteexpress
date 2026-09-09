@@ -141,7 +141,7 @@
     border-radius: 12px;
     border: 1px solid #D8E8F8;
     overflow: hidden;
-    width: 80%;
+    width: 70%;
     margin: 20px 0;
 }
 
@@ -155,7 +155,7 @@
 
 .sectionTitle {
     font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #092E5B;
     text-transform: uppercase;
@@ -163,7 +163,7 @@
 }
 
 .sectionLink {
-    font-size: 11px;
+    font-size: 1.2rem;
     color: #0E4D9A;
     font-weight: 600;
     cursor: pointer;
@@ -176,11 +176,8 @@
     gap: 12px;
     padding: 12px 18px;
     border-bottom: 1px solid #F4F6F9;
-    font-size: 12px;
-}
-
-.orderRow:last-child {
-    border-bottom: none;
+    font-size: 1rem;
+    border: 1px solid red;
 }
 
 .orderRowHead {
@@ -188,7 +185,7 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     color: #5F7FA8;
-    font-size: 10px;
+    font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: .05em;
 }
@@ -210,7 +207,7 @@
     display: inline-block;
     padding: 2px 8px;
     border-radius: 20px;
-    font-size: 10px;
+    font-size: 1rem;
     font-weight: 600;
 }
 

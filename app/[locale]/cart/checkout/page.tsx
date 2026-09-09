@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { FaRegCheckCircle } from "react-icons/fa";
 import AddressAutocomplete from "@/app/global-components/address-autocomplete/address-autocomplete";
 import { useSession } from "@/lib/auth/useSession";
+import { useUser } from "@/lib/hooks/useUser";
 
 export default function Checkout() {
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -51,13 +52,16 @@ function CheckoutForm() {
     // Form validation
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
-    const [loading, setLoading] = useState<string | null>(null);
+    const [loadingString, setLoading] = useState<string | null>(null);
 
     // Stripe - Credit card
     const stripe = useStripe();
     const elements = useElements();
 
-    const user = useSession();
+    const session = useSession();
+
+    const { user, loading } = useUser();
+    
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -86,7 +90,7 @@ function CheckoutForm() {
 
         // ✅ Validation Stripe SEULEMENT si visiteur
         let paymentMethod = null;
-        if (!user.session.authenticated) {
+        if (!session.session.authenticated) {
             if (!stripe || !elements) {
             setError("Erreur: Stripe non chargé");
             return;
@@ -122,7 +126,7 @@ function CheckoutForm() {
         try {
 
 
-            user.session && setLoading("Sending order...");
+            session.session && setLoading("Sending order...");
 
             // 1. Créer la commande
             const orderRes = await fetch(`/api/${locale}/checkout/create-payment`, {
@@ -151,7 +155,7 @@ function CheckoutForm() {
             }
 
             // ✅ SI CONNECTÉ : pas de paiement Stripe, juste vider le panier et succès
-            if (user.session.authenticated) {
+            if (session.session.authenticated) {
                 // Vider le panier
                 await fetch(`/api/${locale}/shop/cart/mark-ordered`, {
                     method: 'PATCH',
@@ -262,6 +266,18 @@ function CheckoutForm() {
     const [clientSecret, setClientSecret] = useState('');
 
     useEffect(() => {
+        if (deliveryMode == "pickup") {
+            setShippingAddress("");
+        }
+    }, [deliveryMode]);
+
+    useEffect(() => {
+        if (user?.shippingAddress) {
+            setShippingAddress(user.shippingAddress);
+        }
+    }, [user?.shippingAddress]);
+
+    useEffect(() => {
         if (total > 0) {
             fetch(`/api/${locale}/checkout`, {
                 method: 'POST',
@@ -285,6 +301,14 @@ function CheckoutForm() {
         script.async = true;
         document.head.appendChild(script);
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            setPrenom(user.firstName);
+            setNom(user.lastName);
+            setEmail(user.email);
+        }
+    }, [user]);
 
     if (!isHydrated) return <div></div>;
 
@@ -349,7 +373,7 @@ function CheckoutForm() {
                         </div>
                     </div>
                     
-                    {clientSecret && !user.session.authenticated && (                        
+                    {clientSecret && !session.session.authenticated && (                        
                     <div className={styles.section}>
                         <div className={styles.formGroup}>
                             <div className={styles.formGroup}>
@@ -423,25 +447,27 @@ function CheckoutForm() {
                         {deliveryMode === 'delivery' &&
                         <div className={styles.formGroup}>
                             <label htmlFor="shipping">{t('address')} de livraison</label>
-                            {<AddressAutocomplete 
+                            
+                            <AddressAutocomplete 
                                 key="delivery-address"
                                 id="delivery-address" 
                                 value={shippingAddress} 
                                 onChange={setShippingAddress}
-                            />}
+                            />
+                            
                         </div>}
                     </div>
 
                     <div className={styles.section}>
                         {error && <p className={styles.error}>{error}</p>}
-                        {loading && <p className={styles.loading}>{loading}</p>}
+                        {loadingString && <p className={styles.loading}>{loadingString}</p>}
                         {success && <p className={styles.success}>{success}</p>}
                         {!success &&
                         <button 
                             type="submit"
                             disabled={cart.length === 0}
                             >
-                            {user.session ? "Envoyer la commande" : t('makePay')}
+                            {session.session ? "Envoyer la commande" : t('makePay')}
                         </button>}
                     </div>
                 </form>
