@@ -47,6 +47,8 @@ export default function Shop() {
     
     // Hydrated = True when cache is being read
     const [isHydrated, setIsHydrated] = useState(false);
+
+    const [loading, setLoading] = useState<number | null>(null);
     
     // Control the language
     const t = useTranslations('shop');
@@ -57,10 +59,10 @@ export default function Shop() {
         'anchors': t('categories.anchors'),
         'keyboxes': t('categories.keyboxes'),
         'hardware': t('categories.hardware'),
-        'structureBigFormat': t('categories.structureBigFormat'),
+        'bigFormatStructure': t('categories.bigFormatStructure'),
     };
 
-    const categoryOrder = ['poles', 'anchors', 'keyboxes', 'hardware', 'structureBigFormat'];
+    const categoryOrder = ['poles', 'anchors', 'keyboxes', 'hardware', 'bigFormatStructure'];
 
     const navOptions: NavOption[] = [
     { key: 'all', label: t('categories.all') },
@@ -77,6 +79,8 @@ export default function Shop() {
     };
 
     const handleAddToCart = async (product: Product) => {
+        if (loading === product.id) return;
+
         const productId = product.id.toString();
         const price = parseFloat(product.price);
         const name = locale === 'en' ? product.name_en || product.name_fr : product.name_fr;
@@ -86,7 +90,8 @@ export default function Shop() {
         setAddedItems([...addedItems, product.id]);
         setTimeout(() => {
             setAddedItems(prev => prev.filter(id => id !== product.id));
-        }, 2000);
+            setLoading(null);
+        }, 500);
     };
 
     // UseEffect to fetch data from DB
