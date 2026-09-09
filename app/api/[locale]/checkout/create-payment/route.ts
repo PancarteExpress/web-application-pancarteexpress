@@ -13,38 +13,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ✅ Chercher une commande pending existante
-    const existingOrder = await prisma.order.findFirst({
-      where: {
-        email,
-        status: 'pending',
-      },
-    });
-
-    let order;
-
-    if (existingOrder) {
-      // ✅ Mettre à jour la commande existante
-      order = await prisma.order.update({
-        where: { id: existingOrder.id },
-        data: {
-          subtotal,
-          tax,
-          total,
-          shippingAddress,
-          items: {
-            // Ajouter les nouveaux items
-            create: items.map((item: any) => ({
-              productId: parseInt(item.productId, 10),
-              quantity: item.quantity,
-              price: item.price,
-            })),
-          },
-        },
+    // ✅ Transaction atomique
+    const order = await prisma.$transaction(async (tx) => {
+      // 1. Récupérer le dernier orderNumber
+      const lastOrder = await tx.order.findFirst({
+        orderBy: { orderNumber: 'desc' },
+        select: { orderNumber: true },
       });
-    } else {
-      // ✅ Créer une nouvelle commande
-      order = await prisma.order.create({
+
+      // 2. Calculer le prochain (avec cyclage)
+      let nextNumber = (lastOrder?.orderNumber ?? 39999) + 1;
+      if (nextNumber > 79999) {
+        nextNumber = 40000;
+      }
+
+      // 4. Créer
+      return await tx.order.create({
         data: {
           email,
           subtotal,
@@ -52,6 +36,7 @@ export async function POST(req: NextRequest) {
           total,
           shippingAddress,
           status: 'pending',
+          orderNumber: nextNumber,
           items: {
             create: items.map((item: any) => ({
               productId: parseInt(item.productId, 10),
@@ -61,11 +46,12 @@ export async function POST(req: NextRequest) {
           },
         },
       });
-    }
+    });
 
     return NextResponse.json({
       success: true,
       orderId: order.id,
+      orderNumber: order.orderNumber, // ✅ Retourner le numéro
     });
   } catch (error) {
     console.error('Erreur create-payment:', error);

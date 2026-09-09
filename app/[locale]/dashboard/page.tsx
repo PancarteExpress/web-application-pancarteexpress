@@ -12,6 +12,10 @@ export default function Dashboard() {
 
     const { user, loadingUser } = useUser();
     const { orders, loadingOrders, error } = useOrders();
+
+    const pendingOrdersCount = orders.filter(order => order.status === 'pending').length;
+    const doneOrdersCount = orders.filter(order => order.status === 'done').length;
+    const canceledOrdersCount = orders.filter(order => order.status === 'canceled').length;
     
     return ( 
         <>
@@ -44,10 +48,11 @@ export default function Dashboard() {
                     <div className={styles.qcardIcon}>📦</div>
                     <div>
                         <p className={styles.qcardTitle}>Commandes</p>
-                        <p className={styles.qcardValue}>121</p>
-                        <p className={styles.qcardDesc}>108 en cours · 9 terminées · 3 annulées</p>
+                        <p className={styles.qcardValue}>Demandes de service</p>
+                        <p className={styles.qcardDesc}>{pendingOrdersCount} en cours · {doneOrdersCount} terminées · {canceledOrdersCount} annulées</p>
+                        <p className={styles.qcardValue}>Produits de la boutique</p>
+                        <p className={styles.qcardDesc}>X en cours · Y terminées · Z annulées</p>
                     </div>
-                    <span className={styles.qcardLink}>Voir mes commandes →</span>
                 </div>
             </div>  
 
@@ -59,9 +64,9 @@ export default function Dashboard() {
                 <div className={`${styles.orderRow} ${styles.orderRowHead}`}>
                     <span>Commande</span>
                     <span>Adresse</span>
-                    <span>Date</span>
+                    <span>Produits</span>
                     <span>État</span>
-                    <span>Action</span>
+                    <span>Payment</span>
                 </div>
 
                 <div>
@@ -71,11 +76,13 @@ export default function Dashboard() {
                     orders.map(order => (
 
                     <div key={order.id} className={styles.orderRow}>
-                        <span className={styles.orderNum}>{order.id.charAt(0)}</span>
-                        <span className={styles.orderAddr}>8368 13e avenue, Montréal</span>
+                        <span className={styles.orderNum}>#{order.orderNumber}</span>
+                        <span className={styles.orderAddr}>{order.shippingAddress || "Ramassage au 2160 rue léger"}</span>
                         <span className={styles.orderDate}>{order.items.length}</span>
-                        <span className={`${styles.badge} ${styles.encours}`}>{order.status.toUpperCase()}</span>
-                        <button className={styles.voirBtn}>Voir</button>
+                        {order.status === "pending" && <span className={`${styles.badge} ${styles.pending}`}>{order.status.toUpperCase()}</span>}
+                        {order.status === "done" && <span className={`${styles.badge} ${styles.done}`}>{order.status.toUpperCase()}</span>}
+                        {order.status === "canceled" && <span className={`${styles.badge} ${styles.canceled}`}>{order.status.toUpperCase()}</span>}
+                        <button className={styles.voirBtn}>Not payed</button>
                     </div>
                     
                     ))

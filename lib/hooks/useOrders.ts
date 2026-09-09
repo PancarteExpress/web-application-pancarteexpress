@@ -15,6 +15,7 @@ type OrderItem = {
 
 type Order = {
   id: string;
+  orderNumber: number;
   email: string;
   subtotal: number;
   tax: number;
