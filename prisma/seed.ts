@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const items = [
-    { id: 1, category: 'accessories', name_fr: 'Boites a cles', price: 29.99, image: "/shop/accessories/accessories1.jpg" },
+    { id: 1, category: 'keyboxes', name_fr: 'Boites a cles', price: 29.99, image: "/shop/keyboxes/keyboxes1.jpg" },
     { id: 2, category: 'anchors', name_fr: 'Ancrage en metal en V', price: 26.99, image: "/shop/anchors/anchors1.jpg" },
     { id: 3, category: 'anchors', name_fr: 'Ancrage en metal pour poteaux colonial', price: 23.99, image: "/shop/anchors/anchors2.jpg" },
     { id: 4, category: 'anchors', name_fr: 'Ancrage en metal standard', price: 26.99, image: "/shop/anchors/anchors3.jpg" },
@@ -28,29 +28,32 @@ const items = [
     { id: 23, category: 'hardware', name_fr: 'Sachet de papillons en nylon', price: 29.99, image: "/shop/hardware/hardware4.jpg" },
     { id: 24, category: 'hardware', name_fr: 'Sachet de rondelles en nylon', price: 13.49, image: "/shop/hardware/hardware5.jpg" },
     { id: 25, category: 'hardware', name_fr: 'Sachet de vis en nylon', price: 44.99, image: "/shop/hardware/hardware6.jpg" },
-    { id: 26, category: 'purchase', name_fr: 'Structure LARGE - FRAMD (flex ou rigide)', price: 1887.99, image: "/shop/purchase/purchase1.jpg" },
-    { id: 27, category: 'commercial', name_fr: 'Structure MINI en V - FRAMD', price: 1334.99, image: "/shop/purchase/purchase2.jpg" },
-    { id: 28, category: 'commercial', name_fr: 'Structure MINI - FRAMD (rigide)', price: 1029.99, image: "/shop/purchase/purchase3.jpg" },
-    { id: 29, category: 'commercial', name_fr: 'Structure STANDARD - FRAMD', price: 1519.99, image: "/shop/purchase/purchase4.jpg" },
-    { id: 30, category: 'commercial', name_fr: 'Structure STANDARD en V - FRAMD', price: 2221.99, image: "/shop/purchase/purchase5.jpg" },
-    { id: 31, category: 'commercial', name_fr: 'LOCATION - LARGE - FRAMD (flex ou rigide)', price: 264.99, image: "/shop/rent/rent1.jpg" },
-    { id: 32, category: 'commercial', name_fr: 'LOCATION - MINI - FRAMD (flex ou rigide)', price: 199.99, image: "/shop/rent/rent2.jpg" },
-    { id: 33, category: 'commercial', name_fr: 'LOCATION - STANDARD - FRAMD (flex ou rigide)', price: 234.99, image: "/shop/rent/rent3.jpg" },
-    { id: 34, category: 'commercial', name_fr: 'LOCATION - Structure MINI en V - FRAMD', price: 224.99, image: "/shop/rent/rent4.jpg" },
-    { id: 35, category: 'commercial', name_fr: 'LOCATION - Structure STANDARD en V - FRAMD', price: 299.99, image: "/shop/rent/rent5.jpg" },
+    { id: 26, category: 'bigFormatStructure', name_fr: 'Structure LARGE - FRAMD (flex ou rigide)', price: 1887.99, image: "/shop/bigFormatStructure/bigFormatStructure1.jpg" },
+    { id: 27, category: 'bigFormatStructure', name_fr: 'Structure MINI en V - FRAMD', price: 1334.99, image: "/shop/bigFormatStructure/bigFormatStructure2.jpg" },
+    { id: 28, category: 'bigFormatStructure', name_fr: 'Structure MINI - FRAMD (rigide)', price: 1029.99, image: "/shop/bigFormatStructure/bigFormatStructure3.jpg" },
+    { id: 29, category: 'bigFormatStructure', name_fr: 'Structure STANDARD - FRAMD', price: 1519.99, image: "/shop/bigFormatStructure/bigFormatStructure4.jpg" },
+    { id: 30, category: 'bigFormatStructure', name_fr: 'Structure STANDARD en V - FRAMD', price: 2221.99, image: "/shop/bigFormatStructure/bigFormatStructure5.jpg" },
+    { id: 31, category: 'bigFormatStructure', name_fr: 'LOCATION - LARGE - FRAMD (flex ou rigide)', price: 264.99, image: "/shop/bigFormatStructure/bigFormatStructure6.jpg" },
+    { id: 32, category: 'bigFormatStructure', name_fr: 'LOCATION - MINI - FRAMD (flex ou rigide)', price: 199.99, image: "/shop/bigFormatStructure/bigFormatStructure7.jpg" },
+    { id: 33, category: 'bigFormatStructure', name_fr: 'LOCATION - STANDARD - FRAMD (flex ou rigide)', price: 234.99, image: "/shop/bigFormatStructure/bigFormatStructure9.jpg" },
+    { id: 34, category: 'bigFormatStructure', name_fr: 'LOCATION - Structure MINI en V - FRAMD', price: 224.99, image: "/shop/bigFormatStructure/bigFormatStructure9.jpg" },
+    { id: 35, category: 'bigFormatStructure', name_fr: 'LOCATION - Structure STANDARD en V - FRAMD', price: 299.99, image: "/shop/bigFormatStructure/bigFormatStructure10.jpg" },
 ];
 
 async function main() {
+  await prisma.cartItem.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.categories.deleteMany();
+
   // Créer ou mettre à jour les catégories
   const categories: { [key: string]: number } = {};
   
   const categoryData = [
-    { name: 'Accessories', slug: 'accessories' },
+    { name: 'Keyboxes', slug: 'keyboxes' },
     { name: 'Anchors', slug: 'anchors' },
     { name: 'Poles', slug: 'poles' },
     { name: 'Hardware', slug: 'hardware' },
-    { name: 'Purchase', slug: 'purchase' },
-    { name: 'Commercial', slug: 'commercial' },
+    { name: 'bigFormatStructure', slug: 'bigFormatStructure' },
   ];
 
   for (const cat of categoryData) {

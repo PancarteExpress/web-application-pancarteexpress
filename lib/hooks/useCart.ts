@@ -85,12 +85,12 @@ export function useCart() {
             body: JSON.stringify({ productId: productIdNum, quantity }),
           });
 
+          const data = await res.json();
+
           if (!res.ok) {
-            const data = await res.json();
             throw new Error(data.error || 'Erreur ajout');
           }
 
-          const data = await res.json();
           if (data.success) {
             setCart(data.items || []);
           }
@@ -173,10 +173,43 @@ export function useCart() {
     [session.authenticated, locale]
   );
 
+  const clearCart = useCallback(
+    async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        if (session.authenticated) {
+          // Marquer les items comme commandés
+          const res = await fetch(`/api/${locale}/shop/cart/mark-ordered`, {
+            method: 'PATCH',
+          });
+
+          if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.error || 'Erreur');
+          }
+
+          setCart([]); // Vider localement
+        } else {
+          localStorage.removeItem('cart');
+          setCart([]);
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Erreur';
+        setError(msg);
+        console.error('[clearCart]', err);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [session.authenticated, locale]
+  );
+
   return {
     cart,
     addToCart,
     removeFromCart,
+    clearCart,
     isLoading,
     error,
   };

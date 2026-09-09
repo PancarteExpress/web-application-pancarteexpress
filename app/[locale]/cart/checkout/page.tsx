@@ -3,8 +3,7 @@
 import styles from "./page.module.css";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useCart } from "@/lib/hooks/useCart"; // ← Change le path
-import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/hooks/useCart";
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js';
 import { CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
@@ -13,6 +12,7 @@ import { useEffect, useState } from "react";
 // React icons
 import { FaRegCheckCircle } from "react-icons/fa";
 import AddressAutocomplete from "@/app/global-components/address-autocomplete/address-autocomplete";
+import { useSession } from "@/lib/auth/useSession";
 
 export default function Checkout() {
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -38,9 +38,6 @@ function CheckoutForm() {
     const t = useTranslations('checkout');
     const locale = useLocale();
 
-    // Redirection
-    const router = useRouter();
-
     // Access to the Cart (Globally)
     const { cart } = useCart();
 
@@ -59,6 +56,8 @@ function CheckoutForm() {
     // Stripe - Credit card
     const stripe = useStripe();
     const elements = useElements();
+
+    const user = useSession();
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -85,51 +84,62 @@ function CheckoutForm() {
             return;
         }
 
-        if (!stripe || !elements) {
+        // ✅ Validation Stripe SEULEMENT si visiteur
+        let paymentMethod = null;
+        if (!user.session.authenticated) {
+            if (!stripe || !elements) {
             setError("Erreur: Stripe non chargé");
             return;
-        }
+            }
 
-        const cardNumber = elements.getElement(CardNumberElement);
-        if (!cardNumber) {
+            const cardNumber = elements.getElement(CardNumberElement);
+            if (!cardNumber) {
             setError("Numéro de carte requis");
             return;
-        }
+            }
 
-        if (deliveryMode == "delivery" && !shippingAddress.trim()) {
+            if (deliveryMode === "delivery" && !shippingAddress.trim()) {
             setError("Adresse de livraison requise");
             return;
-        }
+            }
 
-        setLoading("Payment in progress...");
+            setLoading("Payment in progress...");
 
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardNumber,
-        });
+            const { error, paymentMethod: pm } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: cardNumber,
+            });
 
-        if (error) {
-            setError(error.message ?? "Carte invalide");
-            return;
+            if (error) {
+                setError(error.message ?? "Carte invalide");
+                setLoading(null);
+                return;
+            }
+
+            paymentMethod = pm;
         }
 
         try {
+
+
+            user.session && setLoading("Sending order...");
+
             // 1. Créer la commande
             const orderRes = await fetch(`/api/${locale}/checkout/create-payment`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email,
-                    items: cart.map(item => ({
-                        productId: item.productId, // ← Change item.id en item.productId
-                        quantity: item.quantity,
-                        price: item.price, // ← Plus de parseFloat
-                    })),
-                    subtotal,
-                    tax,
-                    total,
-                    shippingAddress,
-                }),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email,
+                items: cart.map(item => ({
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    price: item.price,
+                })),
+                subtotal,
+                tax,
+                total,
+                shippingAddress,
+            }),
             });
 
             const orderData = await orderRes.json();
@@ -140,67 +150,41 @@ function CheckoutForm() {
                 return;
             }
 
-            // 2. Créer le clientSecret pour le paiement
-            const payRes = await fetch(`/api/${locale}/checkout/create`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    orderId: orderData.orderId,
-                    total,
-                    email,
-                }),
-            });
-
-            const payData = await payRes.json();
-        
-            if (!payRes.ok) {
-                setError(payData.error);
-                setLoading(null);
-                return;
-            }
-
-            // 3. Confirmer le paiement
-            const result = await stripe.confirmCardPayment(payData.clientSecret, {
-                payment_method: paymentMethod.id,
-            });
-
-            if (result.error) {
-                setError(result.error.message ?? "Erreur de paiement");
-            } else if (result.paymentIntent?.status === 'succeeded') {
+            // ✅ SI CONNECTÉ : pas de paiement Stripe, juste vider le panier et succès
+            if (user.session.authenticated) {
+                // Vider le panier
+                await fetch(`/api/${locale}/shop/cart/mark-ordered`, {
+                    method: 'PATCH',
+                });
 
                 const clientEmailHTML = `
                     <h2>Confirmation de commande</h2>
                     <p>Bonjour ${prenom} ${nom},</p>
-                    <p>Votre commande #${orderData.orderId} : a été confirmée.</p>
+                    <p>Votre commande #${orderData.orderId} a été confirmée.</p>
                     <p>
-                        ${shippingAddress ? `
+                    ${shippingAddress ? `
                         <h5>Adresse de livraison :</h5>
-                            - ${shippingAddress}
-                        ` : '<h3>Nous communiquerons avec vous lorsque les articles seront pret</h3>'}
-                
-                        <h5>Produits :</h5>
-                        ${cart.map(item => `
-                            <p>${item.name_fr} x${item.quantity}</p>
-                        `).join('')}
+                        - ${shippingAddress}
+                    ` : '<h3>Nous communiquerons avec vous lorsque les articles seront prêts</h3>'}
+                    <h5>Produits :</h5>
+                    ${cart.map(item => `<p>${item.name_fr} x${item.quantity}</p>`).join('')}
                     </p>
                     <h5>Merci !</h5>
                 `;
-                
+
                 const adminEmailHTML = `
                     <h2>Confirmation de commande</h2>
                     <p>
-                        Commande #${orderData.orderId} a été confirmée
-                        <br />
-                        Information du client : <br />
-                            - ${prenom} ${nom} <br />
-                            - ${email} <br />
-                            - ${shippingAddress}
+                    Commande #${orderData.orderId} a été confirmée
+                    <br />
+                    Information du client : <br />
+                    - ${prenom} ${nom} <br />
+                    - ${email} <br />
+                    - ${shippingAddress}
                     </p>
                     <p>
-                        <h5>Produits :</h5>
-                        ${cart.map(item => `
-                            <p>${item.name_fr} x${item.quantity}</p>
-                        `).join('')}
+                    <h5>Produits :</h5>
+                    ${cart.map(item => `<p>${item.name_fr} x${item.quantity}</p>`).join('')}
                     </p>
                 `;
 
@@ -208,18 +192,64 @@ function CheckoutForm() {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        email,
-                        orderId: orderData.orderId,
-                        clientEmailHTML,
-                        adminEmailHTML,
+                    email,
+                    orderId: orderData.orderId,
+                    clientEmailHTML,
+                    adminEmailHTML,
                     }),
                 });
 
-                // Vider le panier via localStorage
-                localStorage.removeItem('cart');
                 setSuccess("Success");
+                setLoading(null);
+                return; // ← Stop ici, pas de Stripe
+            }
+
+            // ✅ SI VISITEUR : faire le paiement Stripe
+            // 2. Créer le clientSecret
+            const payRes = await fetch(`/api/${locale}/checkout/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                orderId: orderData.orderId,
+                total,
+                email,
+            }),
+            });
+
+            const payData = await payRes.json();
+
+            if (!payRes.ok) {
+            setError(payData.error);
+            setLoading(null);
+            return;
+            }
+
+            // 3. Confirmer le paiement
+            const result = await stripe!.confirmCardPayment(payData.clientSecret, {
+            payment_method: paymentMethod!.id,
+            });
+
+            if (result.error) {
+            setError(result.error.message ?? "Erreur de paiement");
+            } else if (result.paymentIntent?.status === 'succeeded') {
+            const clientEmailHTML = `...`; // même template
+            const adminEmailHTML = `...`;
+
+            await fetch(`/api/${locale}/checkout/sendEmail`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                email,
+                orderId: orderData.orderId,
+                clientEmailHTML,
+                adminEmailHTML,
+                }),
+            });
+
+            localStorage.removeItem('cart');
+            setSuccess("Success");
             } else {
-                setError('Paiement non confirmé');
+            setError('Paiement non confirmé');
             }
         } catch (err: any) {
             setError(err.message);
@@ -319,7 +349,7 @@ function CheckoutForm() {
                         </div>
                     </div>
                     
-                    {clientSecret && (                        
+                    {clientSecret && !user.session.authenticated && (                        
                     <div className={styles.section}>
                         <div className={styles.formGroup}>
                             <div className={styles.formGroup}>
@@ -411,7 +441,7 @@ function CheckoutForm() {
                             type="submit"
                             disabled={cart.length === 0}
                             >
-                            {t('makePay')}
+                            {user.session ? "Envoyer la commande" : t('makePay')}
                         </button>}
                     </div>
                 </form>

@@ -40,7 +40,7 @@ export async function DELETE(
     });
 
     const cartItems = await prisma.cartItem.findMany({
-      where: { userId },
+      where: { userId, isInCart: true },
       include: { product: true },
     });
 

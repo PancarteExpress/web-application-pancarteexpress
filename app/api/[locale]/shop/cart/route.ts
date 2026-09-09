@@ -29,7 +29,7 @@ export async function GET(
     const userId = payload.userId as string;
 
     const cartItems = await prisma.cartItem.findMany({
-      where: { userId },
+      where: { userId, isInCart: true },
       include: { product: true },
     });
 
@@ -60,11 +60,27 @@ export async function POST(
       return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
     }
 
+    console.log('🔍 [1] Token exists:', !!token);
+
     const payload = await verifyJWT(token);
     if (!payload) {
       return NextResponse.json({ error: 'Token invalide' }, { status: 401 });
     }
+
+    console.log('🔍 [2] Payload:', payload);
+
     const userId = payload.userId as string;
+    console.log('🔍 [3] userId from JWT:', userId);
+
+    const userExists = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userExists) {
+      return NextResponse.json({ error: 'Utilisateur non trouvé en BD' }, { status: 401 });
+    }
+    
+    console.log('🔍 [4] User exists in DB:', !!userExists);
 
     const body = await req.json();
     let { productId, quantity } = body;
@@ -89,9 +105,13 @@ export async function POST(
     });
 
     if (existing) {
+      // ✅ Si l'item était commandé (isInCart: false), le remettre actif
       await prisma.cartItem.update({
         where: { id: existing.id },
-        data: { quantity: existing.quantity + quantity },
+        data: { 
+          quantity: existing.quantity + quantity,
+          isInCart: true, // ← Remettre actif au cas où
+        },
       });
     } else {
       await prisma.cartItem.create({

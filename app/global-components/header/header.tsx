@@ -4,7 +4,7 @@
 import styles from './header.module.css';
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 // Translater
@@ -38,7 +38,6 @@ export default function Header() {
     const isActive = (path: string) => activePath === path;
 
     const { session } = useSession();
-    const router = useRouter();
     
     // Fonction de déconnexion
     const handleLogout = async () => {
@@ -48,12 +47,15 @@ export default function Header() {
             const csrfToken = csrfData.token;
 
             await fetch(`/api/${locale}/auth/signout`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': csrfToken,
-                },
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken,
+            },
             });
+
+            // ✅ Dispatcher l'event AVANT le redirect
+            window.dispatchEvent(new Event('session-changed'));
 
             // Recharge la page complètement
             window.location.href = `/${locale}`;
