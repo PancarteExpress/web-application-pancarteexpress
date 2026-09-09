@@ -10,6 +10,12 @@ type OrderItem = {
   productId: number;
   quantity: number;
   price: number;
+  product: { // ✅ AJOUTER
+    id: number;
+    name_fr: string;
+    name_en: string | null;
+    image_url: string | null;
+  };
   createdAt: string;
 };
 
@@ -22,6 +28,7 @@ type Order = {
   total: number;
   shippingAddress: string;
   status: string;
+  isPaid: boolean;
   items: OrderItem[];
   createdAt: string;
   updatedAt: string;

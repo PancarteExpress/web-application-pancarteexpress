@@ -31,7 +31,13 @@ export async function GET(
     // ✅ Récupérer les commandes avec les items
     const orders = await prisma.order.findMany({
       where: { email: user.email },
-      include: { items: true },
+      include: { 
+        items: {
+          include: { 
+            product: true // ✅ AJOUTER
+          }
+        }
+      },
       orderBy: { createdAt: 'desc' },
     });
 

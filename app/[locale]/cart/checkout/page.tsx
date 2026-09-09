@@ -14,6 +14,7 @@ import { FaRegCheckCircle } from "react-icons/fa";
 import AddressAutocomplete from "@/app/global-components/address-autocomplete/address-autocomplete";
 import { useSession } from "@/lib/auth/useSession";
 import { useUser } from "@/lib/hooks/useUser";
+import { prisma } from "@/lib/prisma";
 
 export default function Checkout() {
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -208,49 +209,54 @@ function CheckoutForm() {
             // ✅ SI VISITEUR : faire le paiement Stripe
             // 2. Créer le clientSecret
             const payRes = await fetch(`/api/${locale}/checkout/create`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                orderId: orderData.orderId,
-                total,
-                email,
-            }),
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orderId: orderData.orderId,
+                    total,
+                    email,
+                }),
             });
 
             const payData = await payRes.json();
 
             if (!payRes.ok) {
-            setError(payData.error);
-            setLoading(null);
-            return;
+                setError(payData.error);
+                setLoading(null);
+                return;
             }
 
             // 3. Confirmer le paiement
             const result = await stripe!.confirmCardPayment(payData.clientSecret, {
-            payment_method: paymentMethod!.id,
+                payment_method: paymentMethod!.id,
             });
 
             if (result.error) {
-            setError(result.error.message ?? "Erreur de paiement");
+                setError(result.error.message ?? "Erreur de paiement");
             } else if (result.paymentIntent?.status === 'succeeded') {
-            const clientEmailHTML = `...`; // même template
-            const adminEmailHTML = `...`;
+                const clientEmailHTML = `...`;
+                const adminEmailHTML = `...`;
 
-            await fetch(`/api/${locale}/checkout/sendEmail`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                email,
-                orderId: orderData.orderId,
-                clientEmailHTML,
-                adminEmailHTML,
-                }),
-            });
+                await prisma.order.update({
+                    where: { id: orderData.orderId },
+                    data: { isPaid: true }, 
+                });
 
-            localStorage.removeItem('cart');
-            setSuccess("Success");
+                await fetch(`/api/${locale}/checkout/sendEmail`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                    email,
+                    orderId: orderData.orderId,
+                    clientEmailHTML,
+                    adminEmailHTML,
+                    }),
+                });
+
+                localStorage.removeItem('cart');
+                setSuccess("Success");
             } else {
-            setError('Paiement non confirmé');
+                setError('Paiement non confirmé');
             }
         } catch (err: any) {
             setError(err.message);

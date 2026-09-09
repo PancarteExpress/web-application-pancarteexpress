@@ -85,7 +85,6 @@
     gap: 12px;
     cursor: pointer;
     transition: box-shadow .2s, transform .2s;
-    
 }
 
 .qcard:hover {
@@ -140,7 +139,6 @@
     background: #fff;
     border-radius: 12px;
     border: 1px solid #D8E8F8;
-    overflow: hidden;
     width: 70%;
     margin: 20px 0;
 }
@@ -170,14 +168,94 @@
 }
 
 .orderRow {
-    display: grid;
-    grid-template-columns: 100px 1fr 100px 90px 80px;
-    align-items: center;
+    display: flex;
+    
     gap: 12px;
     padding: 12px 18px;
     border-bottom: 1px solid #F4F6F9;
     font-size: 1rem;
-    border: 1px solid red;
+}
+
+.orderRow .orderInfos, .orderRow .headInfos {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+}
+
+.orderRow .orderDetails, .orderRow .headDetails {
+    flex: 3;
+}
+
+.orderRow .headDetails {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.orderRow .orderDetails {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+
+.orderRow .orderDetails .seeDetails {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+
+    position: relative;
+}
+
+.orderRow .orderDetails .seeDetails .btnDetails {
+    background: #E8F1FB;
+    color: #003580;
+    margin-left: 10px;
+}
+
+.orderRow .orderDetails .seeDetails .dropdownDetails {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    width: 250px;
+    padding: 16px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-left: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    z-index: 1;
+}
+
+.orderRow .orderDetails .seeDetails .dropdownDetails h1 {
+    color: #0E4D9A;
+    font-size: 1rem;
+}
+
+.orderRow .orderDetails .seeDetails .dropdownDetails p {
+    color: black;
+}
+
+.orderRow .orderDetails .seeDetails .btnDetails:hover .dropdownDetails {
+    opacity: 1;
+    visibility: visible;
+}
+
+.orderRow .orderDetails .seeDetails .btnDetails:hover{
+    cursor: pointer;
+}
+
+.orderRow .orderDetails .orderStatus {
+    display: flex;
+    align-items: center;
+}
+
+.orderRow .orderDetails .paymentStatus {
+    display: flex;
+    justify-content: left;
+    align-items: center;
 }
 
 .orderRowHead {
@@ -204,6 +282,7 @@
 }
 
 .badge {
+    text-transform: capitalize;
     display: inline-block;
     text-align: center;
     padding: 2px 8px;
@@ -212,9 +291,27 @@
     font-weight: 600;
 }
 
-.pending {
-    background: #E8F5E9;
-    color: #199636;
+.pending, .isNotPaid {
+    background: #E8F1FB;
+    color: #003580;
+    cursor: pointer;
+    border: 1px dashed #003580;
+}
+
+.cancelOrder {
+    margin-left: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #C62828;
+    display: none;
+}
+
+.pending:hover ~ .cancelOrder {
+    display: inline-block;
+}
+
+.isNotPaid:hover {
+    cursor: pointer;
 }
 
 .canceled {
@@ -222,7 +319,7 @@
     color: #C62828;
 }
 
-.done {
-    background: #E8F1FB;
-    color: #003580;
+.done, .isPaid {
+    background: #E8F5E9;
+    color: #199636;
 }

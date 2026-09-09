@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import { useState } from "react";
-import UpdateProfile from "./components/updateProfile";
+import UpdateProfile from "./components/updateProfile/updateProfile";
 import { useUser } from "@/lib/hooks/useUser";
 import { useOrders } from "@/lib/hooks/useOrders";
 
@@ -27,7 +27,7 @@ export default function Dashboard() {
             <div className={styles.welcome}>
                 <div className={styles.welcomeAvatar}>{user?.firstName.charAt(0)} {user?.lastName.charAt(0)}</div>
                 <div>
-                    <p className={styles.welcomeTitle}>Bonjour, {user?.firstName} 👋</p>
+                    <p className={styles.welcomeTitle}>Bonjour, {user?.firstName} 👋 {user?.role}</p>
                     <p className={styles.welcomeSub}>
                         Bienvenue dans votre espace personnel. Gérez vos commandes, adresses et informations de compte.
                     </p>
@@ -49,9 +49,9 @@ export default function Dashboard() {
                     <div>
                         <p className={styles.qcardTitle}>Commandes</p>
                         <p className={styles.qcardValue}>Demandes de service</p>
-                        <p className={styles.qcardDesc}>{pendingOrdersCount} en cours · {doneOrdersCount} terminées · {canceledOrdersCount} annulées</p>
-                        <p className={styles.qcardValue}>Produits de la boutique</p>
                         <p className={styles.qcardDesc}>X en cours · Y terminées · Z annulées</p>
+                        <p className={styles.qcardValue}>Produits de la boutique</p>
+                        <p className={styles.qcardDesc}>{pendingOrdersCount} en cours · {doneOrdersCount} terminées · {canceledOrdersCount} annulées</p>
                     </div>
                 </div>
             </div>  
@@ -62,11 +62,15 @@ export default function Dashboard() {
                 </div>
 
                 <div className={`${styles.orderRow} ${styles.orderRowHead}`}>
-                    <span>Commande</span>
-                    <span>Adresse</span>
-                    <span>Produits</span>
-                    <span>État</span>
-                    <span>Payment</span>
+                    <div className={styles.headInfos}>
+                        <span>Commande</span>
+                    </div>
+
+                    <div className={styles.headDetails}>
+                        <span>Détails</span>
+                        <span>État</span>
+                        <span>Payment</span>
+                    </div>
                 </div>
 
                 <div>
@@ -76,13 +80,42 @@ export default function Dashboard() {
                     orders.map(order => (
 
                     <div key={order.id} className={styles.orderRow}>
-                        <span className={styles.orderNum}>#{order.orderNumber}</span>
-                        <span className={styles.orderAddr}>{order.shippingAddress || "Ramassage au 2160 rue léger"}</span>
-                        <span className={styles.orderDate}>{order.items.length}</span>
-                        {order.status === "pending" && <span className={`${styles.badge} ${styles.pending}`}>{order.status.toUpperCase()}</span>}
-                        {order.status === "done" && <span className={`${styles.badge} ${styles.done}`}>{order.status.toUpperCase()}</span>}
-                        {order.status === "canceled" && <span className={`${styles.badge} ${styles.canceled}`}>{order.status.toUpperCase()}</span>}
-                        <button className={styles.voirBtn}>Not payed</button>
+                        <div className={styles.orderInfos}>
+                            <span className={styles.orderNum}>#{order.orderNumber}</span>
+                            <span className={styles.orderAddr}>{order.shippingAddress ? `Sera livré au ${order.shippingAddress}` : "Ramassage au 2160 rue léger"}</span>
+                        </div>         
+
+                        <div className={styles.orderDetails}>
+                            <div className={styles.seeDetails}>
+                                <div className={`${styles.badge} ${styles.btnDetails}`}>
+                                    Voir
+                                    <div className={styles.dropdownDetails}>
+                                        {order.items.map((item) => (
+                                            <div key={item.id} className={styles.item}>
+                                                <h1>{item.product.name_fr}</h1>
+                                                <p>Quantité: {item.quantity}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={styles.orderStatus}>
+                                <div className={styles.status}>
+                                    {order.status === "pending" && (<>
+                                    <span className={`${styles.badge} ${styles.pending}`}>{order.status}</span> 
+                                    <span className={styles.cancelOrder}>Click to cancel </span>
+                                    </>)}
+                                </div>
+                                {order.status === "done" && <span className={`${styles.badge} ${styles.done}`}>{order.status}</span>}
+                                {order.status === "canceled" && <span className={`${styles.badge} ${styles.canceled}`}>{order.status}</span>}
+                            </div>
+
+                            <div className={styles.paymentStatus}>
+                                {order.isPaid && <span className={`${styles.badge} ${styles.isPaid}`}>Payed</span>}
+                                {!order.isPaid && order.status !== "canceled" && <span className={`${styles.badge} ${styles.isNotPaid}`}>Effectuer un paiement</span>}
+                            </div>
+                        </div>
                     </div>
                     
                     ))
