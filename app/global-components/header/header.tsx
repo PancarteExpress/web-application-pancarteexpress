@@ -76,12 +76,12 @@ export default function Header() {
 
                     <div className={styles.account}>
                         {!session.authenticated && <Link href={`/${locale}/auth/signup`}>{t('becomeMember')}</Link>}
-                        <Link href={`/${locale}/auth/signin`}>{t('myAccount')}</Link>
                         {session.authenticated && 
-                            <button onClick={handleLogout}>
+                        <button onClick={handleLogout}>
                             Déconnexion
-                            </button>
+                        </button>
                         }
+                        <Link href={`/${locale}/auth/signin`}>{t('myAccount')}</Link>
                     </div>
                 </div>
             </div>

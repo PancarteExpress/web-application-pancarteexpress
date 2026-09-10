@@ -122,7 +122,8 @@ font-family: 'Roboto Mono', monospace;
 }
 
 .topHeader .container .account button {
-    text-align: left;
+    text-align: right;
+    cursor: pointer;
     flex: 1;
     font-weight: 600;
     font-size: 0.9rem;
