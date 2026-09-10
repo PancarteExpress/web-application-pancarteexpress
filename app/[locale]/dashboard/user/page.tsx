@@ -1,21 +1,31 @@
 "use client";
 
 import styles from "./page.module.css";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import UpdateProfile from "./components/updateProfile/updateProfile";
 import { useUser } from "@/lib/hooks/useUser";
 import { useOrders } from "@/lib/hooks/useOrders";
+import ModeGroupAdmin from "./components/groupAdmin/groupAdmin";
 
 export default function UserDashboard() {
 
     const [updateProfile, setUpdateProfile] = useState<boolean>(false);
 
-    const { user, loadingUser } = useUser();
+    const { user, loadingUser, errorUser } = useUser();
     const { orders, loadingOrders, error } = useOrders();
 
-    const pendingOrdersCount = orders.filter(order => order.status === 'pending').length;
-    const doneOrdersCount = orders.filter(order => order.status === 'done').length;
-    const canceledOrdersCount = orders.filter(order => order.status === 'canceled').length;
+    const [changeMode, setChangeMode] = useState<'user' | 'groupAdmin'>('user');
+
+    // ✅ Memoize les calculs
+    const orderStats = useMemo(() => ({
+        pending: orders.filter(o => o.status === 'pending').length,
+        done: orders.filter(o => o.status === 'done').length,
+        canceled: orders.filter(o => o.status === 'canceled').length,
+    }), [orders]);
+
+    // ✅ États de chargement granulaires
+    if (loadingUser) return <div>Chargement profil...</div>;
+    if (errorUser) return <div>Erreur: {errorUser}</div>;
     
     return ( 
         <>
@@ -27,13 +37,46 @@ export default function UserDashboard() {
             <div className={styles.welcome}>
                 <div className={styles.welcomeAvatar}>{user?.firstName.charAt(0)} {user?.lastName.charAt(0)}</div>
                 <div>
-                    <p className={styles.welcomeTitle}>Bonjour, {user?.firstName} 👋 {user?.role}</p>
+                    <p className={styles.welcomeTitle}>Bonjour, {user?.firstName} 👋</p>
                     <p className={styles.welcomeSub}>
                         Bienvenue dans votre espace personnel. Gérez vos commandes, adresses et informations de compte.
                     </p>
                 </div>
             </div>
 
+            {user?.role === "groupAdmin" && 
+            <div className={styles.changeMode}>
+                <label className={styles.radioLabel}>
+                    <input
+                        className={styles.radioInput}
+                        type="radio"
+                        name="changeMode"
+                        value="user"
+                        checked={changeMode === 'user'}
+                        onChange={(e) => setChangeMode('user' as const)}
+                    />
+                    <div className={styles.radioButton} style={{ borderRadius: '10px 0 0 10px' }}>Mode Utilisateur</div>
+                </label>
+
+                <label className={styles.radioLabel}>
+                    <input
+                        className={styles.radioInput}
+                        type="radio"
+                        name="changeMode"
+                        value="groupAdmin"
+                        checked={changeMode === 'groupAdmin'}
+                        onChange={(e) => setChangeMode('groupAdmin' as const)}
+                    />
+                    <div className={styles.radioButton} style={{ borderRadius: '0 10px 10px 0' }}>Mode Administrateur</div>
+                </label>
+            </div>}
+
+            {changeMode === 'groupAdmin' &&
+            <div className={styles.modeAdmin}>
+                <ModeGroupAdmin />
+            </div>}
+            
+            {changeMode === 'user' &&<>
             <div className={styles.quickGrid}>
                 <div className={styles.qcard} onClick={() => setUpdateProfile(true)}>
                     <div className={styles.qcardIcon}>👤</div>
@@ -51,7 +94,7 @@ export default function UserDashboard() {
                         <p className={styles.qcardValue}>Demandes de service</p>
                         <p className={styles.qcardDesc}>X en cours · Y terminées · Z annulées</p>
                         <p className={styles.qcardValue}>Produits de la boutique</p>
-                        <p className={styles.qcardDesc}>{pendingOrdersCount} en cours · {doneOrdersCount} terminées · {canceledOrdersCount} annulées</p>
+                        <p className={styles.qcardDesc}>{orderStats.pending} en cours · {orderStats.done} terminées · {orderStats.canceled} annulées</p>
                     </div>
                 </div>
             </div>  
@@ -74,6 +117,7 @@ export default function UserDashboard() {
                 </div>
 
                 <div>
+                {loadingOrders && <p>Chargement commandes...</p>}
                 {orders.length === 0 ? (
                     <p>Aucune commande</p>
                 ) : (
@@ -122,6 +166,7 @@ export default function UserDashboard() {
                 )}
                 </div>
             </div>
+            </>}
         </div>
         
         {updateProfile && <UpdateProfile onClose={() => setUpdateProfile(false)} />}

@@ -1,0 +1,13 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    
+}
+
+.mainContainer .test {
+    width: 100%;
+
+    border: 1px solid red;
+}

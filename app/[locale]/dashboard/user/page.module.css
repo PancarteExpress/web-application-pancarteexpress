@@ -63,6 +63,42 @@
     font-size: 1.4rem;
 }
 
+.mainContainer .changeMode {
+
+    width: 50%;
+
+    margin-top: 20px;
+
+    display: flex;
+
+}
+
+.mainContainer .changeMode .radioLabel {
+    flex: 1;
+    text-align: center;
+    color: #92A0B1;
+    font-size: 1.2rem;
+    font-weight: 700;
+    
+}
+
+.mainContainer .changeMode .radioLabel .radioInput {
+    display: none;
+}
+
+.radioInput:checked + .radioButton {
+  background-color: #0E3A8C;
+}
+
+.radioButton {
+    padding: 10px;
+}
+
+.modeAdmin {
+    width: 70%;
+    margin: 20px 0;
+}
+
 .quickGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
