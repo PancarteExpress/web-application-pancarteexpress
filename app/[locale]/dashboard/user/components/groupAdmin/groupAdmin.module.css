@@ -6,8 +6,39 @@
     
 }
 
-.mainContainer .test {
+.mainContainer .label {
     width: 100%;
+    border: 1px solid red;
+}
+
+.mainContainer .membersData {
+    width: 100%;
+
+    display: flex;
+    border: 1px solid red;
+}
+
+.mainContainer .membersData .members {
+    flex: 1;
+}
+
+.mainContainer .membersData .members button {
+
+    padding: 10px;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: left;
+                        
+}
+
+.mainContainer .membersData .userDetails {
+    flex: 4;
+
+    padding: 10px 20px;
 
     border: 1px solid red;
 }

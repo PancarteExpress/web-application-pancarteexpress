@@ -72,6 +72,8 @@ export async function signup(input: SignupInput): Promise<SignupResult> {
           name: groupName,
         },
       });
+
+      isNewGroup = true;
     }
 
     // Hash password
