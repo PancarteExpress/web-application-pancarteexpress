@@ -41,6 +41,7 @@ export async function signup(input: SignupInput): Promise<SignupResult> {
 
     // Déterminer le groupe
     let group;
+    let isNewGroup = false;
 
     if (input.isGroup && input.groupName?.trim()) {
       // Chercher groupe existant (exact match)
@@ -60,6 +61,7 @@ export async function signup(input: SignupInput): Promise<SignupResult> {
             name: input.groupName.trim(),
           },
         });
+        isNewGroup = true;
       }
     } else {
       // Groupe solo : utiliser companyName ou email
@@ -85,8 +87,8 @@ export async function signup(input: SignupInput): Promise<SignupResult> {
         phone: input.phone.trim(),
         companyName: input.companyName?.trim() || null,
         groupId: group.id,
-        role: input.isGroup && input.groupName ? 'user' : 'groupAdmin',
-        emailVerified: new Date(), // ← Email vérifié immédiatement
+        role: isNewGroup ? 'groupAdmin' : 'user',
+        emailVerified: new Date(),
       },
     });
 
