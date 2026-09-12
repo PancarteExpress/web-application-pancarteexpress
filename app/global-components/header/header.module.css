@@ -1,19 +1,4 @@
 
-/* palettes de style
-
-
-/* Titres 
-font-family: var(--font-montserrat);
-
-/* Corps de texte 
-font-family: var(--font-poppins);
-
-/* Code/données 
-font-family: 'Roboto Mono', monospace;
-
-*/
-
-
 /* Top Header Styles */
 .topHeader {
     display: flex;

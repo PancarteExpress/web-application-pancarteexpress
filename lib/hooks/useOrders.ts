@@ -41,39 +41,39 @@ export function useOrders() {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+   const fetchOrders = async () => {
+    setLoadingOrders(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/${locale}/orders`);
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+
+      const contentType = res.headers.get('content-type');
+      if (!contentType?.includes('application/json')) {
+        throw new Error('Réponse non-JSON reçue');
+      }
+
+      const data = await res.json();
+      setOrders(data);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Erreur inconnue';
+      console.error('[useOrders]', msg);
+      setError(msg);
+      setOrders([]);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
   useEffect(() => {
     if (!session.authenticated) {
       setOrders([]);
       setError(null);
       return;
     }
-
-    const fetchOrders = async () => {
-      setLoadingOrders(true);
-      setError(null);
-      try {
-        const res = await fetch(`/api/${locale}/orders`);
-
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-        }
-
-        const contentType = res.headers.get('content-type');
-        if (!contentType?.includes('application/json')) {
-          throw new Error('Réponse non-JSON reçue');
-        }
-
-        const data = await res.json();
-        setOrders(data);
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Erreur inconnue';
-        console.error('[useOrders]', msg);
-        setError(msg);
-        setOrders([]);
-      } finally {
-        setLoadingOrders(false);
-      }
-    };
 
     fetchOrders();
 
@@ -83,5 +83,5 @@ export function useOrders() {
     return () => window.removeEventListener('session-changed', handleSessionChange);
   }, [session.authenticated, locale]);
 
-  return { orders, loadingOrders, error };
+  return { orders, loadingOrders, error, refetch: fetchOrders };
 }

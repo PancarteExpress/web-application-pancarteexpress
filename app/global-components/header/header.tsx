@@ -141,6 +141,15 @@ export default function Header() {
                     <Link href="/cart" className={styles.navItem} style={{ color: isActive('/cart') ? '#0E4D98' : 'black' }}>
                         {t('navbar.cart')}
                     </Link>
+                    
+                    {!session.authenticated && <Link href={`/${locale}/auth/signup`}>{t('becomeMember')}</Link>}
+                    {session.authenticated && 
+                    <button onClick={handleLogout}>
+                        Déconnexion
+                    </button>
+                    }
+                    <Link href={`/${locale}/auth/signin`}>{t('myAccount')}</Link>
+                    
                     <Link href="/demande-service" className={styles.navItem}><FaPaperPlane /> {t('navbar.onlineApplication')}</Link>   
                 </div>
             </div>
