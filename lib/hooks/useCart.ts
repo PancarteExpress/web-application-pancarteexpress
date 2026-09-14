@@ -3,23 +3,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocale } from 'next-intl';
 import { useSession } from '@/lib/auth/useSession';
-
-export type CartItem = {
-  productId: number;
-  quantity: number;
-  price: number;
-  name: string;
-  name_fr: string;
-  name_en: string | null;
-  image_url: string | null;
-};
+import { CartItemResponse } from '@/lib/types/shop';
 
 const CART_STORAGE_KEY = 'cart';
 
 export function useCart() {
   const locale = useLocale();
   const { session } = useSession();
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItemResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,14 +29,13 @@ export function useCart() {
         const msg = err instanceof Error ? err.message : 'Erreur init panier';
         setError(msg);
         console.error('[useCart init]', err);
-        setCart([]); 
+        setCart([]);
       }
     };
 
     init();
   }, [session.authenticated, locale]);
 
-  // Charger le panier depuis la BD
   const loadCartFromDB = async () => {
     try {
       const res = await fetch(`/api/${locale}/shop/cart`);
@@ -66,7 +56,6 @@ export function useCart() {
       productId: string | number,
       quantity: number,
       price: number,
-      name: string,
       name_fr: string,
       name_en: string | null,
       image_url: string | null
@@ -74,8 +63,8 @@ export function useCart() {
       setIsLoading(true);
       setError(null);
       try {
-        const productIdNum = typeof productId === 'string' 
-          ? parseInt(productId, 10) 
+        const productIdNum = typeof productId === 'string'
+          ? parseInt(productId, 10)
           : productId;
 
         if (session.authenticated) {
@@ -97,7 +86,7 @@ export function useCart() {
         } else {
           setCart(prevCart => {
             const existing = prevCart.find(item => item.productId === productIdNum);
-            let updated: CartItem[];
+            let updated: CartItemResponse[];
 
             if (existing) {
               updated = prevCart.map(item =>
@@ -106,14 +95,13 @@ export function useCart() {
                   : item
               );
             } else {
-              updated = [...prevCart, { 
-                productId: productIdNum, 
-                quantity, 
-                price, 
-                name, 
-                name_fr, 
-                name_en, 
-                image_url 
+              updated = [...prevCart, {
+                productId: productIdNum,
+                quantity,
+                price,
+                name_fr,
+                name_en,
+                image_url,
               }];
             }
 
@@ -137,8 +125,8 @@ export function useCart() {
       setIsLoading(true);
       setError(null);
       try {
-        const productIdNum = typeof productId === 'string' 
-          ? parseInt(productId, 10) 
+        const productIdNum = typeof productId === 'string'
+          ? parseInt(productId, 10)
           : productId;
 
         if (session.authenticated) {
@@ -173,37 +161,33 @@ export function useCart() {
     [session.authenticated, locale]
   );
 
-  const clearCart = useCallback(
-    async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        if (session.authenticated) {
-          // Marquer les items comme commandés
-          const res = await fetch(`/api/${locale}/shop/cart/mark-ordered`, {
-            method: 'PATCH',
-          });
+  const clearCart = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      if (session.authenticated) {
+        const res = await fetch(`/api/${locale}/shop/cart/mark-ordered`, {
+          method: 'PATCH',
+        });
 
-          if (!res.ok) {
-            const data = await res.json();
-            throw new Error(data.error || 'Erreur');
-          }
-
-          setCart([]); // Vider localement
-        } else {
-          localStorage.removeItem('cart');
-          setCart([]);
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || 'Erreur');
         }
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Erreur';
-        setError(msg);
-        console.error('[clearCart]', err);
-      } finally {
-        setIsLoading(false);
+
+        setCart([]);
+      } else {
+        localStorage.removeItem(CART_STORAGE_KEY);
+        setCart([]);
       }
-    },
-    [session.authenticated, locale]
-  );
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Erreur';
+      setError(msg);
+      console.error('[clearCart]', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [session.authenticated, locale]);
 
   return {
     cart,

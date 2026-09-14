@@ -1,37 +1,22 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { useLocale } from 'next-intl';
 import { useSession } from '@/lib/auth/useSession';
 import { useUser } from './useUser';
-
-type GroupData = {
-  id: string;
-  name: string;
-  users: Array<{
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    phone: string;
-    companyName?: string;
-    shippingAddress?: string;
-    role: string;
-  }>;
-  createdAt: string;
-  updatedAt: string;
-};
+import { GroupWithUsers } from '@/lib/types/group';
 
 export function useGroup() {
   const locale = useLocale();
   const { session } = useSession();
-  const { user } = useUser(); // ✅ Dépend du user pour groupId
-  
-  const [group, setGroup] = useState<GroupData | null>(null);
+  const { user } = useUser();
+
+  const [group, setGroup] = useState<GroupWithUsers | null>(null);
   const [loadingGroup, setLoadingGroup] = useState(false);
   const [errorGroup, setErrorGroup] = useState<string | null>(null);
 
   useEffect(() => {
-    // ✅ Conditions : auth + user chargé + a un groupId
-    if (!session.authenticated || !user || !user.groupId) {
+    if (!session.authenticated || !user?.groupId) {
       setGroup(null);
       setErrorGroup(null);
       return;
@@ -53,8 +38,7 @@ export function useGroup() {
         }
 
         const data = await res.json();
-        setGroup(data);
-
+        setGroup(data as GroupWithUsers);
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Erreur inconnue';
         console.error('[useGroup]', msg);
@@ -66,7 +50,7 @@ export function useGroup() {
     };
 
     fetchGroup();
-  }, [session.authenticated, locale, user?.groupId]); // ✅ Re-fetch si groupId change
+  }, [session.authenticated, locale, user?.groupId]);
 
   return { group, loadingGroup, errorGroup };
 }

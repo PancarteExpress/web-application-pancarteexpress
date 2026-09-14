@@ -1,86 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { isVerificationCodeExpired, isVerificationCodeBlocked } from '@/lib/auth/utils';
+import { verifyForgotPasswordCode } from '@/lib/auth/server/auth.service';
+import { verifyForgotPasswordSchema } from '@/lib/validations/password';
 
 export async function POST(
-  _req: NextRequest,
-  { params: _params }: { params: Promise<{ locale: string }> }
+  req: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
 ) {
   try {
-    const body = await _req.json();
-    const { email, code } = body;
+    const { locale } = await params;
+    const body = await req.json();
 
-    if (!email?.trim() || !code?.trim()) {
+    // Valider avec Zod
+    const validatedInput = verifyForgotPasswordSchema.parse(body);
+
+    // Appeler le service
+    const result = await verifyForgotPasswordCode(
+      validatedInput.email,
+      validatedInput.code,
+      locale
+    );
+
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Email et code requis' },
+        { error: result.error },
         { status: 400 }
       );
     }
 
-    // Trouver le code
-    const forgotPasswordCode = await prisma.forgotPasswordCode.findUnique({
-      where: { email: email.toLowerCase() },
-    });
-
-    if (!forgotPasswordCode) {
-      return NextResponse.json(
-        { error: 'Code non trouvé' },
-        { status: 404 }
-      );
-    }
-
-    // Vérifier si bloqué
-    if (isVerificationCodeBlocked(forgotPasswordCode.attemptsCount ?? 0)) {
-      return NextResponse.json(
-        { error: 'Compte bloqué. Demandez un nouveau code.' },
-        { status: 403 }
-      );
-    }
-
-    // Vérifier si expiré
-    if (isVerificationCodeExpired(forgotPasswordCode.expiresAt)) {
-      return NextResponse.json(
-        { error: 'Code expiré' },
-        { status: 401 }
-      );
-    }
-
-    // Vérifier le code
-    if (forgotPasswordCode.code !== code.trim()) {
-      const newAttemptsCount = (forgotPasswordCode.attemptsCount ?? 0) + 1;
-      const isNowBlocked = newAttemptsCount >= 3;
-
-      await prisma.forgotPasswordCode.update({
-        where: { email: email.toLowerCase() },
-        data: {
-          attemptsCount: newAttemptsCount,
-          isBlocked: isNowBlocked,
-        },
-      });
-
-      if (isNowBlocked) {
-        return NextResponse.json(
-          { error: 'Compte bloqué après 3 tentatives' },
-          { status: 403 }
-        );
-      }
-
-      const remainingAttempts = 3 - newAttemptsCount;
-      return NextResponse.json(
-        { error: `Code incorrect. ${remainingAttempts} tentative(s) restante(s).` },
-        { status: 401 }
-      );
-    }
-
-    // Code correct !
     return NextResponse.json({
       success: true,
-      message: 'Code vérifié',
+      message: result.message,
     });
   } catch (error) {
-    console.error('Erreur verify-forgot-password:', error);
+    console.error('[POST /api/auth/verify-forgot-password]', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Erreur serveur' },
+      { error: 'Erreur serveur' },
       { status: 500 }
     );
   }

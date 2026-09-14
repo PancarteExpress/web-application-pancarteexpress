@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import { verifyJWT } from '@/lib/auth/jwt';
+import { getOrders } from '@/lib/orders/server/order.service';
 
 export async function GET(
   req: NextRequest,
@@ -19,31 +19,12 @@ export async function GET(
       return NextResponse.json({ error: 'Token invalide' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: payload.userId },
-      select: { email: true },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'Utilisateur non trouvé' }, { status: 404 });
-    }
-
-    // ✅ Récupérer les commandes avec les items
-    const orders = await prisma.order.findMany({
-      where: { email: user.email },
-      include: { 
-        items: {
-          include: { 
-            product: true // ✅ AJOUTER
-          }
-        }
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+    // Appeler le service
+    const orders = await getOrders(payload.email);
 
     return NextResponse.json(orders);
   } catch (error) {
-    console.error('[GET /orders]', error);
+    console.error('[GET /api/orders]', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }

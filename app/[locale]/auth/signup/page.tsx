@@ -1,130 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { signup } from '@/lib/auth/signup';
+import { useSignUp } from '@/lib/hooks/auth/useSignUp';
 import AddressAutocomplete from '@/app/global-components/address-autocomplete/address-autocomplete';
 import styles from './page.module.css';
 
 export default function SignupPage() {
+  const t = useTranslations('becomeMember');
   const locale = useLocale();
   const router = useRouter();
-  const t = useTranslations('becomeMember');
 
-  // Form states
-  const [isGroup, setIsGroup] = useState<boolean>(false);
-  const [groupName, setGroupName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [pickupAddress, setPickupAddress] = useState('');
-  const [needsPickup, setNeedsPickup] = useState<boolean>(false);
+  const [state, actions] = useSignUp();
 
-  // UI states
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [loading, setLoading] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(null);
-    setError(null);
-    setSuccess(null);
-    
-    // Validation
-    if (isGroup && !groupName.trim()) {
-      setError(t('feedbackMessages.missingGroupName'));
-      return;
-    }
-
-    if (!firstName.trim()) {
-      setError(t('feedbackMessages.missingFirstName'));
-      return;
-    }
-
-    if (!lastName.trim()) {
-      setError(t('feedbackMessages.missingLastName'));
-      return;
-    }
-
-    if (!phone.trim()) {
-      setError(t('feedbackMessages.missingPhoneNumber'));
-      return;
-    }
-
-    if (!email.trim()) {
-      setError(t('feedbackMessages.missingEmail'));
-      return;
-    }
-
-    if (!password.trim()) {
-      setError(t('feedbackMessages.missingPassword'));
-      return;
-    }
-
-    if (!confirmPassword.trim()) {
-      setError(t('feedbackMessages.missingPasswordConfirmation'));
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError(t('feedbackMessages.errorPasswordsMissmatch'));
-      return;
-    }
-
-    setLoading("Tentative de création du compte...");
-
-    try {
-      // Appeler Server Action
-      const result = await signup({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        phone: phone.trim(),
-        email: email.trim().toLowerCase(),
-        password,
-        companyName: companyName.trim() || undefined,
-        isGroup,
-        groupName: isGroup ? groupName.trim() : undefined,
-      });
-
-      if (!result.success) {
-        setError(result.error || t('feedbackMessages.errorRegisteringUser'));
-        return;
-      }
-
-      setLoading(null);
-      setSuccess(t('feedbackMessages.successUserCreated'));
-
-      // Setter le cookie et rediriger vers dashboard
-      if (result.token) {
-        // Créer une route API pour setter le cookie
-        const csrfRes = await fetch(`/api/${locale}/auth/csrf`);
-        const csrfData = await csrfRes.json();
-
-        await fetch(`/api/${locale}/auth/signup`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': csrfData.token,
-          },
-          body: JSON.stringify({ token: result.token }),
-        });
-
-        // Rediriger vers dashboard
-        setTimeout(() => {
-          window.location.href = `/${locale}/dashboard`;
-        }, 1000);
-      }
-    } catch (err) {
-      setLoading(null);
-      setError(err instanceof Error ? err.message : t('feedbackMessages.errorNetwork'));
-    } finally {
-      setLoading(null);
+  const handleSubmitWrapper = async (e: React.FormEvent) => {
+    const result = await actions.handleSubmit(e);
+    if (result.success && result.redirect && result.email) {
+      // ✅ MODIFIÉ: Ajouter check result.email
+      sessionStorage.setItem('pendingVerificationEmail', result.email);
+      setTimeout(() => {
+        window.location.href = `/${locale}${result.redirect}`;
+      }, 1000);
     }
   };
 
@@ -201,7 +98,7 @@ export default function SignupPage() {
           </div>
         </div>
 
-        <form className={styles.contactForm} onSubmit={handleSubmit}>
+        <form className={styles.contactForm} onSubmit={handleSubmitWrapper}>
           <div className={styles.formHead}>
             <h2 className={styles.formTitle}>{t('subSubTitle')}</h2>
           </div>
@@ -217,21 +114,23 @@ export default function SignupPage() {
                   type="radio"
                   id="groupYes"
                   name="group"
-                  checked={isGroup === true}
-                  onChange={() => setIsGroup(true)}
+                  checked={state.isGroup === true}
+                  onChange={() => actions.setIsGroup(true)}
+                  disabled={state.isLoading}
                 />
                 <label htmlFor="groupYes">{t('group')}</label>
               </div>
 
-              {isGroup && (
+              {state.isGroup && (
                 <div className={styles.field}>
                   <label htmlFor="groupName">{t('groupName')}</label>
                   <input
                     id="groupName"
                     type="text"
                     placeholder="Pancarte Express"
-                    value={groupName}
-                    onChange={(e) => setGroupName(e.target.value)}
+                    value={state.groupName}
+                    onChange={(e) => actions.setGroupName(e.target.value)}
+                    disabled={state.isLoading}
                   />
                 </div>
               )}
@@ -241,8 +140,9 @@ export default function SignupPage() {
                   type="radio"
                   id="groupNo"
                   name="group"
-                  checked={isGroup === false}
-                  onChange={() => setIsGroup(false)}
+                  checked={state.isGroup === false}
+                  onChange={() => actions.setIsGroup(false)}
+                  disabled={state.isLoading}
                 />
                 <label htmlFor="groupNo">{t('alone')}</label>
               </div>
@@ -259,8 +159,9 @@ export default function SignupPage() {
                   id="firstName"
                   type="text"
                   placeholder="Jean"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  value={state.firstName}
+                  onChange={(e) => actions.setFirstName(e.target.value)}
+                  disabled={state.isLoading}
                 />
               </div>
               <div className={styles.field}>
@@ -269,8 +170,9 @@ export default function SignupPage() {
                   id="lastName"
                   type="text"
                   placeholder="Tremblay"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  value={state.lastName}
+                  onChange={(e) => actions.setLastName(e.target.value)}
+                  disabled={state.isLoading}
                 />
               </div>
             </div>
@@ -284,8 +186,9 @@ export default function SignupPage() {
                   id="phone"
                   type="text"
                   placeholder="(514) 825-2709"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={state.phone}
+                  onChange={(e) => actions.setPhone(e.target.value)}
+                  disabled={state.isLoading}
                 />
               </div>
               <div className={styles.field}>
@@ -293,8 +196,9 @@ export default function SignupPage() {
                 <input
                   id="companyName"
                   type="text"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
+                  value={state.companyName}
+                  onChange={(e) => actions.setCompanyName(e.target.value)}
+                  disabled={state.isLoading}
                 />
               </div>
             </div>
@@ -308,8 +212,9 @@ export default function SignupPage() {
                   id="email"
                   type="email"
                   placeholder="pancarteexpress@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={state.email}
+                  onChange={(e) => actions.setEmail(e.target.value)}
+                  disabled={state.isLoading}
                 />
               </div>
             </div>
@@ -325,8 +230,9 @@ export default function SignupPage() {
                   id="password"
                   type="password"
                   placeholder="*********"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={state.password}
+                  onChange={(e) => actions.setPassword(e.target.value)}
+                  disabled={state.isLoading}
                 />
               </div>
               <div className={styles.field}>
@@ -335,8 +241,9 @@ export default function SignupPage() {
                   id="confirmPassword"
                   type="password"
                   placeholder="*********"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={state.confirmPassword}
+                  onChange={(e) => actions.setConfirmPassword(e.target.value)}
+                  disabled={state.isLoading}
                 />
               </div>
             </div>
@@ -351,19 +258,21 @@ export default function SignupPage() {
                   type="radio"
                   id="pickupYes"
                   name="pickup"
-                  checked={needsPickup === true}
-                  onChange={() => setNeedsPickup(true)}
+                  checked={state.needsPickup === true}
+                  onChange={() => actions.setNeedsPickup(true)}
+                  disabled={state.isLoading}
                 />
                 <label htmlFor="pickupYes">{t('yesPickup')}</label>
               </div>
 
-              {needsPickup && (
+              {state.needsPickup && (
                 <div className={styles.field}>
                   <label htmlFor="pickupAddress">{t('pickupAddress')}</label>
                   <AddressAutocomplete
                     id="pickupAddress"
-                    value={pickupAddress}
-                    onChange={setPickupAddress}
+                    value={state.pickupAddress}
+                    onChange={actions.setPickupAddress}
+                    //disabled={state.isLoading}
                   />
                 </div>
               )}
@@ -373,19 +282,20 @@ export default function SignupPage() {
                   type="radio"
                   id="pickupNo"
                   name="pickup"
-                  checked={needsPickup === false}
-                  onChange={() => setNeedsPickup(false)}
+                  checked={state.needsPickup === false}
+                  onChange={() => actions.setNeedsPickup(false)}
+                  disabled={state.isLoading}
                 />
                 <label htmlFor="pickupNo">{t('noPickup')}</label>
               </div>
             </div>
 
             <div className={styles.field}>
-              {error && <p className={styles.error}>{error}</p>}
-              {success && <p className={styles.success}>{success}</p>}
-              {loading && <p className={styles.loading}>{loading}</p>}
+              {state.error && <p className={styles.error}>{state.error}</p>}
+              {state.success && <p className={styles.success}>{state.success}</p>}
+              {state.isLoading && <p className={styles.loading}>{state.isLoading}</p>}
               <button type="submit">
-                {loading ? t('feedbackMessages.loadingUserCreation') : t('join')}
+                {state.isLoading ? t('feedbackMessages.loadingUserCreation') : t('join')}
               </button>
             </div>
           </div>

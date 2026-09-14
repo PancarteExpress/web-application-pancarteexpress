@@ -1,46 +1,19 @@
 'use client';
 
 import styles from './page.module.css';
-import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { FaHouseChimney } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
+import { useSignIn } from '@/lib/hooks/auth/useSignIn';
 
 export default function SigninPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
- 
-  // Ajoute ça juste après pour déboguer
-  useEffect(() => {
-    console.log('Error state:', error);
-  }, [error]);
-
-  const [success, setSuccess] = useState<string | null>(null);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
-
   const t = useTranslations('connection');
   const feedbackMessages = useTranslations('connection.feedbackMessages');
 
   const locale = useLocale();
   const router = useRouter();
 
-  // Fetch CSRF token on mount
-  useEffect(() => {
-    const fetchCsrfToken = async () => {
-      try {
-        const res = await fetch(`/api/${locale}/auth/csrf`);
-        const data = await res.json();
-        setCsrfToken(data.token);
-      } catch (err) {
-        console.error('Erreur récupération CSRF:', err);
-      }
-    };
-
-    fetchCsrfToken();
-  }, [locale]);
+  const [state, actions] = useSignIn();
 
   const handleBecomeMember = () => {
     router.push(`/${locale}/auth/signup`);
@@ -50,67 +23,17 @@ export default function SigninPage() {
     router.push(`/${locale}/auth/forgot-password`);
   };
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
-    setError(null);
-    setSuccess(null);
-
-    if (!email.trim()) {
-      console.log('Email vide, setError appelé');
-      setError(feedbackMessages('missingEmail'));
-      
-      return;
-    }
-
-    if (!password.trim()) {
-      setError(feedbackMessages('missingPassword'));
-      return;
-    }
-
-    if (!csrfToken) {
-      setError('Erreur sécurité: token manquant');
-      return;
-    }
-
-    try {
-      setIsFetching(true);
-
-      const response = await fetch(`/api/${locale}/auth/signin`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken,
-        },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          password,
-          rememberMe,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || 'Erreur de connexion');
-        return;
-      }
-
-      setSuccess('Connexion réussie. Redirection...');
-
-      // Redirection après connexion réussie
+  const handleSubmitWrapper = async (e: React.FormEvent) => {
+    const result = await actions.handleSubmit(e);
+    if (result.success && result.redirect) {
       setTimeout(() => {
-        window.location.href = `/${locale}${data.redirect}`;
-      });
-    } catch (err) {
-      setError(feedbackMessages('errorNetwork'));
-    } finally {
-      setIsFetching(false);
+        window.location.href = `/${locale}${result.redirect}`;
+      }, 500);
     }
-  }
+  };
 
   return (
-    <form className={styles.connectionForm} onSubmit={handleSubmit}>
+    <form className={styles.connectionForm} onSubmit={handleSubmitWrapper}>
       <fieldset className={styles.credentials}>
         <div className={styles.connectionHeader}>
           <FaHouseChimney size={30} style={{ color: '#0E4D9A' }} />
@@ -122,8 +45,9 @@ export default function SigninPage() {
           <input
             id="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={state.email}
+            onChange={(e) => actions.setEmail(e.target.value)}
+            disabled={state.isFetching}
           />
         </div>
 
@@ -133,8 +57,9 @@ export default function SigninPage() {
             id="password"
             type="password"
             autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={state.password}
+            onChange={(e) => actions.setPassword(e.target.value)}
+            disabled={state.isFetching}
           />
         </div>
 
@@ -142,8 +67,9 @@ export default function SigninPage() {
           <input
             type="checkbox"
             id="rememberMe"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
+            checked={state.rememberMe}
+            onChange={(e) => actions.setRememberMe(e.target.checked)}
+            disabled={state.isFetching}
           />
           <label htmlFor="rememberMe" style={{ marginLeft: '8px', fontSize: '14px', fontFamily: 'Inter, sans-serif', color: '#5F7FA8' }}>
             Se souvenir de moi
@@ -155,6 +81,7 @@ export default function SigninPage() {
             type="button"
             className={styles.newPassword}
             onClick={handleNewPassword}
+            disabled={state.isFetching}
           >
             {t('passwordForgotten')}
           </button>
@@ -162,11 +89,13 @@ export default function SigninPage() {
 
         <div className={styles.submit}>
           <div className={styles.feedback}>
-            {error && <p className={styles.error}>{error}</p>}
-            {isFetching && <p className={styles.loading}>Tentative de connexion en cours...</p>}
+            {state.error && <p className={styles.error}>{state.error}</p>}
+            {state.isFetching && (
+              <p className={styles.loading}>Tentative de connexion en cours...</p>
+            )}
           </div>
 
-          <button type="submit" disabled={isFetching}>
+          <button type="submit" disabled={state.isFetching}>
             {t('connect')}
           </button>
 
@@ -176,6 +105,7 @@ export default function SigninPage() {
             type="button"
             className={styles.becomeMember}
             onClick={handleBecomeMember}
+            disabled={state.isFetching}
           >
             {t('createOne')}
           </button>

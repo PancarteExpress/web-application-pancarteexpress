@@ -1,69 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { hashPassword } from '@/lib/auth/utils';
+import { resetPassword } from '@/lib/auth/server/auth.service';
+import { resetPasswordSchema } from '@/lib/validations/password';
 
 export async function POST(
-  _req: NextRequest,
-  { params: _params }: { params: Promise<{ locale: string }> }
+  req: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
 ) {
   try {
-    const body = await _req.json();
-    const { email, password } = body;
+    const { locale } = await params;
+    const body = await req.json();
 
-    if (!email?.trim() || !password?.trim()) {
+    // Valider avec Zod
+    const validatedInput = resetPasswordSchema.parse(body);
+
+    // Appeler le service
+    const result = await resetPassword(
+      validatedInput.email,
+      validatedInput.password,
+      locale
+    );
+
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Email et mot de passe requis' },
+        { error: result.error },
         { status: 400 }
       );
     }
 
-    // Vérifier que le code existe (a été validé)
-    const forgotPasswordCode = await prisma.forgotPasswordCode.findUnique({
-      where: { email: email.toLowerCase() },
-    });
-
-    if (!forgotPasswordCode) {
-      return NextResponse.json(
-        { error: 'Code non valide ou expiré' },
-        { status: 401 }
-      );
-    }
-
-    // Trouver l'utilisateur
-    const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Utilisateur non trouvé' },
-        { status: 404 }
-      );
-    }
-
-    // Hash le nouveau password
-    const passwordHash = await hashPassword(password);
-
-    // Mettre à jour le password
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { passwordHash },
-    });
-
-    // Supprimer le code
-    await prisma.forgotPasswordCode.delete({
-      where: { email: email.toLowerCase() },
-    });
-
     return NextResponse.json({
       success: true,
-      message: 'Mot de passe réinitialisé',
-      redirect: '/auth/signin',
+      message: result.message,
+      redirect: result.redirect,
     });
   } catch (error) {
-    console.error('Erreur reset-password:', error);
+    console.error('[POST /api/auth/reset-password]', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Erreur serveur' },
+      { error: 'Erreur serveur' },
       { status: 500 }
     );
   }

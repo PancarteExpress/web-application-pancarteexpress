@@ -1,39 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyCsrfToken } from '@/lib/auth/server/csrf';
+import { signUpUser } from '@/lib/auth/server/auth.service';
 
 export async function POST(
   req: NextRequest,
-  { params: _params }: { params: Promise<{ locale: string }> }
+  { params }: { params: Promise<{ locale: string }> }
 ) {
   try {
-    const body = await req.json();
-    const { token } = body;
+    const { locale } = await params;
 
-    if (!token) {
+    // 1. Vérifier CSRF
+    const csrfResult = await verifyCsrfToken(req);
+    if (!csrfResult.valid) {
       return NextResponse.json(
-        { error: 'Token manquant' },
+        { error: csrfResult.error },
+        { status: 403 }
+      );
+    }
+
+    // 2. Récupérer et valider body
+    const body = await req.json();
+
+    // 3. Appeler le service
+    const result = await signUpUser(body, locale);
+
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error },
         { status: 400 }
       );
     }
 
-    // Setter le cookie de session
+    // 4. Créer response
     const response = NextResponse.json({
       success: true,
-      message: 'Session créée',
+      message: result.message,
+      redirect: result.redirect,
     });
 
-    response.cookies.set('session', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60, // 24h
-      path: '/',
-    });
+    response.cookies.delete('csrf-secret');
 
     return response;
   } catch (error) {
-    console.error('Erreur signup:', error);
+    console.error('[POST /api/auth/signup]', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Erreur serveur' },
+      { error: 'Erreur serveur' },
       { status: 500 }
     );
   }

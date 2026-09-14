@@ -1,98 +1,28 @@
 'use client';
 
 import styles from '../signin/page.module.css';
-import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { FaHouseChimney } from 'react-icons/fa6';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
+import { useResetPassword } from '@/lib/hooks/auth/useResetPassword';
 
 function ResetPasswordClient() {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
-
   const t = useTranslations('connection');
   const locale = useLocale();
   const router = useRouter();
+
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
 
-  useEffect(() => {
-    const fetchCsrfToken = async () => {
-      try {
-        const res = await fetch(`/api/${locale}/auth/csrf`);
-        const data = await res.json();
-        setCsrfToken(data.token);
-      } catch (err) {
-        console.error('Erreur récupération CSRF:', err);
-      }
-    };
+  const [state, actions] = useResetPassword(email);
 
-    fetchCsrfToken();
-  }, [locale]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setError(null);
-
-    if (!password.trim()) {
-      setError('Mot de passe requis');
-      return;
-    }
-
-    if (password.length < 3) {
-      setError('Le mot de passe doit contenir au moins 3 caractères');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas');
-      return;
-    }
-
-    if (!csrfToken) {
-      setError('Erreur sécurité: token manquant');
-      return;
-    }
-
-    if (!email) {
-      setError('Email manquant');
-      return;
-    }
-
-    try {
-      setIsFetching(true);
-
-      const response = await fetch(`/api/${locale}/auth/reset-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken,
-        },
-        body: JSON.stringify({
-          email: email.toLowerCase(),
-          password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || 'Erreur réinitialisation');
-        return;
-      }
-
+  const handleSubmitWrapper = async (e: React.FormEvent) => {
+    const result = await actions.handleSubmit(e);
+    if (result.success) {
       setTimeout(() => {
         router.push(`/${locale}/auth/signin`);
-      });
-    } catch (err) {
-      setError('Erreur réseau');
-    } finally {
-      setIsFetching(false);
+      }, 500);
     }
   };
 
@@ -101,7 +31,7 @@ function ResetPasswordClient() {
   };
 
   return (
-    <form className={styles.connectionForm} onSubmit={handleSubmit}>
+    <form className={styles.connectionForm} onSubmit={handleSubmitWrapper}>
       <fieldset className={styles.credentials}>
         <div className={styles.connectionHeader}>
           <FaHouseChimney size={30} style={{ color: '#0E4D9A' }} />
@@ -111,7 +41,7 @@ function ResetPasswordClient() {
         <p style={{ textAlign: 'center', color: '#5F7FA8', fontSize: '14px', marginBottom: '20px' }}>
           Entrez votre nouveau mot de passe pour :
           <br />
-          <strong>{email}</strong>
+          <strong>{state.email}</strong>
         </p>
 
         <div className={styles.inputs}>
@@ -120,8 +50,9 @@ function ResetPasswordClient() {
             id="password"
             type="password"
             placeholder="*********"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={state.password}
+            onChange={(e) => actions.setPassword(e.target.value)}
+            disabled={state.isFetching}
           />
         </div>
 
@@ -131,24 +62,26 @@ function ResetPasswordClient() {
             id="confirmPassword"
             type="password"
             placeholder="*********"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={state.confirmPassword}
+            onChange={(e) => actions.setConfirmPassword(e.target.value)}
+            disabled={state.isFetching}
           />
         </div>
 
         <div className={styles.submit}>
           <div className={styles.feedback}>
-            {error && <p className={styles.error}>{error}</p>}
-            {isFetching && <p className={styles.loading}>Sauvegarde en cours...</p>}
+            {state.error && <p className={styles.error}>{state.error}</p>}
+            {state.isFetching && <p className={styles.loading}>Sauvegarde en cours...</p>}
           </div>
 
-          <button type="submit" disabled={isFetching}>
+          <button type="submit" disabled={state.isFetching}>
             Réinitialiser
           </button>
 
           <button
             type="button"
             onClick={handleBackToSignin}
+            disabled={state.isFetching}
             style={{
               all: 'unset',
               color: '#0E4D9A',

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { createPaymentIntent } from '@/lib/checkout/server/checkout.service';
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
+) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-    
     const body = await req.json();
     const { orderId, total, email } = body;
 
@@ -15,20 +16,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(total * 100), // Convertir en cents
-      currency: 'cad',
-      metadata: { orderId, email },
+    // Appeler le service avec metadata
+    const result = await createPaymentIntent(total, {
+      orderId,
+      email: email || '',
     });
+
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error },
+        { status: 400 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      clientSecret: paymentIntent.client_secret,
+      clientSecret: result.clientSecret,
     });
   } catch (error) {
-    console.error('Erreur create:', error);
+    console.error('[POST /api/checkout/create]', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Erreur serveur' },
+      { error: 'Erreur serveur' },
       { status: 500 }
     );
   }

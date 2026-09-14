@@ -1,63 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { createOrder } from '@/lib/checkout/server/checkout.service';
+import { createOrderPaymentSchema } from '@/lib/validations/checkout';
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
+) {
   try {
     const body = await req.json();
-    const { email, items, subtotal, tax, total, shippingAddress } = body;
 
-    if (!email || !items || items.length === 0) {
+    // Valider avec Zod
+    const validatedInput = createOrderPaymentSchema.parse(body);
+
+    // Appeler le service
+    const result = await createOrder(
+      validatedInput.email,
+      validatedInput.items,
+      validatedInput.subtotal,
+      validatedInput.tax,
+      validatedInput.total,
+      validatedInput.shippingAddress
+    );
+
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Données manquantes' },
+        { error: result.error },
         { status: 400 }
       );
     }
 
-    // ✅ Transaction atomique
-    const order = await prisma.$transaction(async (tx) => {
-      // 1. Récupérer le dernier orderNumber
-      const lastOrder = await tx.order.findFirst({
-        orderBy: { orderNumber: 'desc' },
-        select: { orderNumber: true },
-      });
-
-      // 2. Calculer le prochain (avec cyclage)
-      let nextNumber = (lastOrder?.orderNumber ?? 39999) + 1;
-      if (nextNumber > 79999) {
-        nextNumber = 40000;
-      }
-
-      // 4. Créer
-      return await tx.order.create({
-        data: {
-          email,
-          subtotal,
-          tax,
-          total,
-          shippingAddress,
-          status: 'pending',
-          orderNumber: nextNumber,
-          items: {
-            create: items.map((item: any) => ({
-              productId: parseInt(item.productId, 10),
-              quantity: item.quantity,
-              price: item.price,
-            })),
-          },
-        },
-      });
-    });
-
     return NextResponse.json({
       success: true,
-      orderId: order.id,
-      orderNumber: order.orderNumber, // ✅ Retourner le numéro
+      orderId: result.order!.id,
+      orderNumber: result.order!.orderNumber,
     });
   } catch (error) {
-    console.error('Erreur create-payment:', error);
+    console.error('[POST /api/checkout/create-payment]', error);
+    const msg = error instanceof Error ? error.message : 'Erreur serveur';
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Erreur serveur' },
-      { status: 500 }
+      { error: msg },
+      { status: error instanceof Error ? 400 : 500 }
     );
   }
 }

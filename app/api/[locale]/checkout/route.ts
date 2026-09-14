@@ -1,37 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-
+import { createPaymentIntent } from '@/lib/checkout/server/checkout.service';
+import { createPaymentIntentSchema } from '@/lib/validations/checkout';
 
 export async function POST(
   req: NextRequest,
-  { params: _params }: { params: Promise<{ locale: string }> }
+  { params }: { params: Promise<{ locale: string }> }
 ) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-    
     const body = await req.json();
-    const { amount } = body;
 
-    if (!amount || amount <= 0) {
+    // Valider avec Zod
+    const validatedInput = createPaymentIntentSchema.parse(body);
+
+    // Appeler le service
+    const result = await createPaymentIntent(validatedInput.amount);
+
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Montant invalide' },
+        { error: result.error },
         { status: 400 }
       );
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100),
-      currency: 'cad',
-    });
-
     return NextResponse.json({
       success: true,
-      clientSecret: paymentIntent.client_secret,
+      clientSecret: result.clientSecret,
     });
   } catch (error) {
-    console.error('Erreur checkout:', error);
+    console.error('[POST /api/checkout]', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Erreur serveur' },
+      { error: 'Erreur serveur' },
       { status: 500 }
     );
   }

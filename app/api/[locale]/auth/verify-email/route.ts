@@ -1,32 +1,25 @@
-import Tokens from 'csrf';
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { isVerificationCodeExpired, isVerificationCodeBlocked } from '@/lib/auth/utils';
+import { verifyCsrfToken } from '@/lib/auth/server/csrf';
+import { verifyEmailCode } from '@/lib/auth/server/auth.service';
 
-const tokens = new Tokens();
-
-export async function POST(_req: NextRequest, { params: _params }: { params: Promise<{ locale: string }> }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
+) {
   try {
-    // 1. Vérifier CSRF token
-    const csrfToken = _req.headers.get('X-CSRF-Token');
-    const csrfSecret = _req.cookies.get('csrf-secret')?.value;
+    const { locale } = await params;
 
-    if (!csrfToken || !csrfSecret) {
+    // 1. Vérifier CSRF
+    const csrfResult = await verifyCsrfToken(req);
+    if (!csrfResult.valid) {
       return NextResponse.json(
-        { error: 'Token CSRF manquant' },
+        { error: csrfResult.error },
         { status: 403 }
       );
     }
 
-    if (!tokens.verify(csrfSecret, csrfToken)) {
-      return NextResponse.json(
-        { error: 'Token CSRF invalide' },
-        { status: 403 }
-      );
-    }
-
-    // 2. Récupérer le body
-    const body = await _req.json();
+    // 2. Récupérer et valider body
+    const body = await req.json();
     const { email, code } = body;
 
     if (!email?.trim() || !code?.trim()) {
@@ -36,90 +29,30 @@ export async function POST(_req: NextRequest, { params: _params }: { params: Pro
       );
     }
 
-    // 3. Trouver le VerificationCode
-    const verificationCode = await prisma.verificationCode.findFirst({
-      where: { email: email.toLowerCase() },
-      include: { user: true },
-    });
+    // 3. Appeler le service
+    const result = await verifyEmailCode(email, code, locale);
 
-    if (!verificationCode) {
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Code de vérification non trouvé' },
-        { status: 404 }
+        { error: result.error },
+        { status: 400 }
       );
     }
 
-    // 4. Vérifier si bloqué
-    if (isVerificationCodeBlocked(verificationCode.attemptsCount ?? 0)) {
-      return NextResponse.json(
-        { error: 'Compte bloqué. Contactez l\'administrateur.' },
-        { status: 403 }
-      );
-    }
-
-    // 5. Vérifier si expiré
-    if (isVerificationCodeExpired(verificationCode.expiresAt)) {
-      return NextResponse.json(
-        { error: 'Code expiré. Demandez un nouveau code.' },
-        { status: 401 }
-      );
-    }
-
-    // 6. Vérifier le code
-    if (verificationCode.code !== code.trim()) {
-      // Incrémenter les tentatives échouées
-      const newAttemptsCount = (verificationCode.attemptsCount ?? 0) + 1;
-      const isNowBlocked = newAttemptsCount >= 3;
-
-      await prisma.verificationCode.update({
-        where: { id: verificationCode.id },
-        data: {
-          attemptsCount: newAttemptsCount,
-          isBlocked: isNowBlocked,
-        },
-      });
-
-      if (isNowBlocked) {
-        return NextResponse.json(
-          { error: 'Compte bloqué après 3 tentatives. Contactez l\'administrateur.' },
-          { status: 403 }
-        );
-      }
-
-      const remainingAttempts = 3 - newAttemptsCount;
-      return NextResponse.json(
-        { error: `Code incorrect. ${remainingAttempts} tentative(s) restante(s).` },
-        { status: 401 }
-      );
-    }
-
-    // 7. Code correct ! Marquer l'email comme vérifié
-    await prisma.user.update({
-      where: { id: verificationCode.userId },
-      data: {
-        emailVerified: new Date(),
-      },
-    });
-
-    // 8. Supprimer le code de vérification
-    await prisma.verificationCode.delete({
-      where: { id: verificationCode.id },
-    });
-
-    // 9. Créer response
+    // 4. Créer response
     const response = NextResponse.json({
       success: true,
-      redirect: '/auth/signin',
+      message: result.message,
+      redirect: result.redirect,
     });
 
-    // Supprimer le cookie CSRF après utilisation
     response.cookies.delete('csrf-secret');
 
     return response;
   } catch (error) {
-    console.error('Erreur verify-email:', error);
+    console.error('[POST /api/auth/verify-email]', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Erreur serveur' },
+      { error: 'Erreur serveur' },
       { status: 500 }
     );
   }

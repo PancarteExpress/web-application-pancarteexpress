@@ -1,18 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyJWT } from '@/lib/auth/jwt';
 
-export async function GET(_req: NextRequest, { params: _params }: { params: Promise<{ locale: string }> } ) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
+) {
   try {
-    const token = _req.cookies.get('session')?.value;
+    const token = req.cookies.get('session')?.value;
 
     if (!token) {
-      return NextResponse.json({ authenticated: false }, { status: 401 });
+      return NextResponse.json(
+        { authenticated: false },
+        { status: 401 }
+      );
     }
 
     const session = await verifyJWT(token);
 
     if (!session) {
-      return NextResponse.json({ authenticated: false }, { status: 401 });
+      return NextResponse.json(
+        { authenticated: false },
+        { status: 401 }
+      );
     }
 
     return NextResponse.json({
@@ -23,7 +32,10 @@ export async function GET(_req: NextRequest, { params: _params }: { params: Prom
       groupId: session.groupId,
     });
   } catch (error) {
-    console.error('Erreur vérification session:', error);
-    return NextResponse.json({ authenticated: false }, { status: 401 });
+    console.error('[GET /api/auth/me]', error);
+    return NextResponse.json(
+      { authenticated: false },
+      { status: 401 }
+    );
   }
 }

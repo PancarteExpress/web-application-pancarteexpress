@@ -1,0 +1,100 @@
+.mainContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    z-index: 1;
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 10px;
+
+}
+
+.mainContainer button {
+    border-radius: 10px;
+    border: 2px solid red;
+    background-color: #F8D8D8;
+    color: red;
+    font-weight: 700;
+    padding: 5px;
+}
+
+.mainContainer .section {
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #D8E8F8;
+    overflow: hidden;
+}
+
+.mainContainer .section .sectionHead {
+    background: #F4F6F9;
+    border-bottom: 1px solid #D8E8F8;
+    padding: 12px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #092E5B;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.mainContainer .section .formGroup {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-bottom: 1px solid #EEF4FB;
+}
+
+.mainContainer .section .formGroup:last-child {
+    border-bottom: none;
+}
+
+.mainContainer .section .formGroup label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #5F7FA8;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.mainContainer .section .formGroup .StripeElement {
+    padding: 10px 12px;
+    border: 1px solid #C5D8EF;
+    border-radius: 8px;
+    background: #F8FAFD;
+    transition: border-color .15s;
+}
+
+.mainContainer .section .formGroup .StripeElement--focus {
+    border-color: #0E4D9A;
+    background: #fff;
+}
+
+.mainContainer .section .formGroup .StripeElement--invalid {
+    border-color: #fa755a;
+}
+
+.mainContainer button[type="submit"] {
+    all: unset;
+    display: block;
+    width: calc(100% - 40px);
+    margin: 16px 20px;
+    padding: 11px;
+    background: #0E4D9A;
+    color: #fff;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background .15s;
+}
+
+.mainContainer button[type="submit"]:hover {
+    background: #092E5B;
+}

@@ -3,36 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useLocale } from 'next-intl';
 import { useSession } from '@/lib/auth/useSession';
-
-type OrderItem = {
-  id: string;
-  orderId: string;
-  productId: number;
-  quantity: number;
-  price: number;
-  product: { // ✅ AJOUTER
-    id: number;
-    name_fr: string;
-    name_en: string | null;
-    image_url: string | null;
-  };
-  createdAt: string;
-};
-
-type Order = {
-  id: string;
-  orderNumber: number;
-  email: string;
-  subtotal: number;
-  tax: number;
-  total: number;
-  shippingAddress: string;
-  status: string;
-  isPaid: boolean;
-  items: OrderItem[];
-  createdAt: string;
-  updatedAt: string;
-};
+import { Order } from '@/lib/types/order';
 
 export function useOrders() {
   const locale = useLocale();
@@ -41,7 +12,7 @@ export function useOrders() {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-   const fetchOrders = async () => {
+  const fetchOrders = async () => {
     setLoadingOrders(true);
     setError(null);
     try {
@@ -77,7 +48,6 @@ export function useOrders() {
 
     fetchOrders();
 
-    // Re-fetch au logout
     const handleSessionChange = () => fetchOrders();
     window.addEventListener('session-changed', handleSessionChange);
     return () => window.removeEventListener('session-changed', handleSessionChange);
