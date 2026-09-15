@@ -25,11 +25,14 @@ export default function SigninPage() {
 
   const handleSubmitWrapper = async (e: React.FormEvent) => {
     const result = await actions.handleSubmit(e);
-    if (result.success && result.redirect) {
-      setTimeout(() => {
-        window.location.href = `/${locale}${result.redirect}`;
-      }, 500);
-    }
+  
+    if (result.redirect) {
+      // ✅ NOUVEAU: Redirection vers verify-email
+      router.push(`/${locale}${result.redirect}`);
+    } else if (result.success) {
+      // Signin normal
+      router.push(`/${locale}/dashboard`);
+    }  
   };
 
   return (

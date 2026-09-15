@@ -27,9 +27,12 @@ export async function POST(
 
     if (!result.success) {
       return NextResponse.json(
-        { error: result.error },
-        { status: 401 }
-      );
+      { 
+        error: result.error || 'Erreur authentification',
+        redirect: result.redirect  // ← Ajouter ici
+      },
+      { status: 401 }
+    );
     }
 
     // 4. Créer response avec cookie

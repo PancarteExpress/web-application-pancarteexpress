@@ -85,8 +85,12 @@ export function useSignIn(): [UseSignInState, UseSignInActions] {
         const data = await response.json();
 
         if (!response.ok) {
-          setError(data.error || 'Erreur de connexion');
-          return { success: false };
+          setError(data.error || 'Erreur connexion');
+          // ✅ NOUVEAU: Retourner le redirect aussi
+          return { 
+            success: false, 
+            redirect: data.redirect  // ← Capturer ici
+          };
         }
 
         return { success: true, redirect: data.redirect };

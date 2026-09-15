@@ -80,7 +80,8 @@ export async function signInUser(
     if (!user.emailVerified) {
       return {
         success: false,
-        error: AUTH_ERRORS.EMAIL_NOT_VERIFIED,
+        error: 'error while verifying email',
+        redirect: `/auth/verify-email?email=${encodeURIComponent(user.email)}`,
       };
     }
 
