@@ -9,6 +9,16 @@ import Payment from './components/payment/payment';
 export default function UserDashboard() {
   const [state, actions] = useDashboard();
 
+  const selectedOrder = state.makePaymentOpen && state.selectedOrderIdForPayment
+    ? state.orders.find(o => o.id === state.selectedOrderIdForPayment)
+    : null;
+
+    console.log('DEBUG:', {
+  makePaymentOpen: state.makePaymentOpen,
+  selectedOrderIdForPayment: state.selectedOrderIdForPayment,
+  selectedOrder,
+});
+
   if (state.loadingUser) {
     return <div>Chargement profil...</div>;
   }
@@ -246,7 +256,7 @@ export default function UserDashboard() {
                           ) : (
                             <span
                               className={styles.isNotPayed}
-                              onClick={() => actions.setMakePaymentOpen(true)}
+                              onClick={() => actions.handleMakePayment(order.id)}
                             >
                               Faire un paiement
                             </span>
@@ -281,8 +291,14 @@ export default function UserDashboard() {
       {state.updateProfileOpen && (
         <UpdateProfile onClose={() => actions.setUpdateProfileOpen(false)} />
       )}
-      {state.makePaymentOpen && (
-        <Payment onClose={() => actions.setMakePaymentOpen(false)} />
+      {state.makePaymentOpen && selectedOrder && (
+        <Payment 
+          onClose={() => actions.setMakePaymentOpen(false)}
+          orderId={selectedOrder.id}
+          email={selectedOrder.email}
+          amount={selectedOrder.total}
+          shippingAddress={selectedOrder.shippingAddress}
+        />
       )}
     </>
   );

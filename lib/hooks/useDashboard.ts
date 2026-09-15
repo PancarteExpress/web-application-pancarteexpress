@@ -23,6 +23,7 @@ export interface DashboardState {
   updateProfileOpen: boolean;
   makePaymentOpen: boolean;
   selectedOrderId: string | null;
+  selectedOrderIdForPayment: string | null;
   cancelOrderId: string | null;
   changeMode: DashboardMode;
 
@@ -36,6 +37,7 @@ export interface DashboardActions {
   setMakePaymentOpen: (open: boolean) => void;
   setSelectedOrderId: (orderId: string | null) => void;
   setCancelOrderId: (orderId: string | null) => void;
+  setSelectedOrderIdForPayment: (orderId: string | null) => void;
   setChangeMode: (mode: DashboardMode) => void;
   handleMakePayment: (orderId: string) => void;
   handleCancelOrder: (orderId: string) => Promise<void>;
@@ -52,6 +54,7 @@ export function useDashboard(): [DashboardState, DashboardActions] {
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [cancelOrderId, setCancelOrderId] = useState<string | null>(null);
   const [changeMode, setChangeMode] = useState<DashboardMode>('user');
+  const [selectedOrderIdForPayment, setSelectedOrderIdForPayment] = useState<string | null>(null);
 
   // Computed values
   const orderStats = useMemo<OrderStats>(() => ({
@@ -64,23 +67,26 @@ export function useDashboard(): [DashboardState, DashboardActions] {
 
   // Handlers
   const handleMakePayment = (orderId: string) => {
-    setSelectedOrderId(orderId);
+    //setSelectedOrderId(orderId);
+    setSelectedOrderIdForPayment(orderId);
     setMakePaymentOpen(true);
   };
 
   const handleCancelOrder = async (orderId: string) => {
     try {
-      // TODO: appeler la Server Action cancelOrder
-      // const result = await cancelOrder(orderId);
-      // if (result.success) {
-      //   setCancelOrderId(null);
-      //   await refetchOrders();
-      // }
-      
+      const response = await fetch(`/api/fr/orders/${orderId}/cancel`, {
+        method: 'PATCH',
+      });
+
+      if (!response.ok) {
+        alert('Erreur annulation');
+        return;
+      }
+
       setCancelOrderId(null);
       await refetchOrders();
     } catch (error) {
-      console.error('[handleCancelOrder]', error);
+      console.error(error);
     }
   };
 
@@ -95,6 +101,7 @@ export function useDashboard(): [DashboardState, DashboardActions] {
     updateProfileOpen,
     makePaymentOpen,
     selectedOrderId,
+    selectedOrderIdForPayment,
     cancelOrderId,
     changeMode,
     orderStats,
@@ -107,6 +114,7 @@ export function useDashboard(): [DashboardState, DashboardActions] {
     setSelectedOrderId,
     setCancelOrderId,
     setChangeMode,
+    setSelectedOrderIdForPayment,
     handleMakePayment,
     handleCancelOrder,
   };

@@ -428,6 +428,7 @@
 .mainContainer .shopOrders .order div h1 .isNotPayed {
     background-color: #fff0b3;
     border: 2px dashed #f8c239;
+    cursor: pointer;
 }
 
 .mainContainer .shopOrders .order div h1 .isPayed {

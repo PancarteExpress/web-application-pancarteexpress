@@ -72,6 +72,15 @@ export function useCheckout(): [UseCheckoutState, UseCheckoutActions] {
     }
   }, [total, locale]);
 
+  useEffect(() => {
+    if (document.querySelector('script[src*="maps.googleapis.com"]')) return;
+    
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
+
   // Charger user data
   useEffect(() => {
     if (user) {

@@ -1,17 +1,52 @@
 .mainContainer {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50%;
-    z-index: 1;
-    background-color: lightgray;
-    border-radius: 10px;
-    padding: 10px;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
 
+    z-index: 1;
+
+    background-color: rgba(9, 46, 91, .45);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.mainContainer button {
+.paymentContainer {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    background-color: white;
+    border: 3px solid #D8E8F8;
+    overflow: hidden;
+
+    border-radius: 10px;
+}
+
+@media (max-width: 700px) { .paymentContainer { width: 90%; } }
+
+.mainContainer .paymentHeader {
+
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #0E4D9A;
+    padding: 10px;   
+
+    border-radius: 10px 10px 0 0;
+}
+
+.mainContainer .paymentHeader label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: white;
+}
+
+.mainContainer .paymentHeader button {
     border-radius: 10px;
     border: 2px solid red;
     background-color: #F8D8D8;
@@ -20,39 +55,51 @@
     padding: 5px;
 }
 
-.mainContainer .section {
-    margin: 32px auto;
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid #D8E8F8;
-    overflow: hidden;
+.mainContainer .orderInfos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
 }
 
-.mainContainer .section .sectionHead {
-    background: #F4F6F9;
-    border-bottom: 1px solid #D8E8F8;
-    padding: 12px 20px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
+.mainContainer .orderInfos .orderDetails label:first-child {
+    font-size: 1.2rem;
     font-weight: 700;
-    color: #092E5B;
-    text-transform: uppercase;
-    letter-spacing: .05em;
 }
 
-.mainContainer .section .formGroup {
+.mainContainer .orderInfos .orderDetails label:last-child {
+    font-size: 0.8rem;
+    color: #7D96B8;
+}
+
+.mainContainer .orderInfos .orderFinalPrice {
+    text-align: right;
+}
+
+.mainContainer .orderInfos .orderFinalPrice label:first-child {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0E4D9A;
+}
+
+.mainContainer .orderInfos .orderFinalPrice label:last-child {
+    font-size: 0.8rem;
+    color: #7D96B8;
+}
+
+.mainContainer .paymentSection {
+    background-color: white;
+    
+}
+
+.mainContainer .paymentSection .formGroup {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 5px;
-    border-bottom: 1px solid #EEF4FB;
 }
 
-.mainContainer .section .formGroup:last-child {
-    border-bottom: none;
-}
-
-.mainContainer .section .formGroup label {
+.mainContainer .paymentSection .formGroup label {
     font-size: 11px;
     font-weight: 600;
     color: #5F7FA8;
@@ -60,41 +107,23 @@
     letter-spacing: .05em;
 }
 
-.mainContainer .section .formGroup .StripeElement {
-    padding: 10px 12px;
-    border: 1px solid #C5D8EF;
-    border-radius: 8px;
-    background: #F8FAFD;
-    transition: border-color .15s;
+.mainContainer .paymentSection .paymentSecured {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 0.8rem;
+    padding: 10px;
+    border-radius: 10px;
 }
 
-.mainContainer .section .formGroup .StripeElement--focus {
-    border-color: #0E4D9A;
-    background: #fff;
-}
-
-.mainContainer .section .formGroup .StripeElement--invalid {
-    border-color: #fa755a;
-}
-
-.mainContainer button[type="submit"] {
-    all: unset;
-    display: block;
-    width: calc(100% - 40px);
-    margin: 16px 20px;
-    padding: 11px;
-    background: #0E4D9A;
-    color: #fff;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    text-align: center;
+.mainContainer .paymentSecured button {
+    border-radius: 10px;
+    padding: 5px 20px;
     cursor: pointer;
-    box-sizing: border-box;
-    transition: background .15s;
-}
-
-.mainContainer button[type="submit"]:hover {
-    background: #092E5B;
+    background-color: #D8E8F8;
+    font-weight: 700;
+    border: 2px solid #0E4D9A;
 }
